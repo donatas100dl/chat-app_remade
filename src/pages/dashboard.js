@@ -1,12 +1,11 @@
 import "../css/dashboard.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "../components/navbar";
 import dotsSvg from "../assets/dots.svg";
 import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person";
 import Message from "../components/message";
 import smileSvg from "../assets/smile-face.svg";
-import axios from "axios";
 import Emoji_selector from "../components/emoji_selector";
 
 function Dashboard() {  
@@ -14,16 +13,6 @@ function Dashboard() {
   const toggleEmoji = () => {
     setIsShown(!isShown);
   }
-
-  useEffect(() => {
-    axios.get('https://emoji-api.com/emojis?access_key=YOUR_API_KEY')
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
 
   return (
     <div className="dashboard">
