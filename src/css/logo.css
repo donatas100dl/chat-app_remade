@@ -1,0 +1,32 @@
+.logo {
+  position: relative;
+  width: 100px;
+  height: fit-content;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0px;
+  justify-content: center;
+  align-items: center;
+}
+.logo img {
+  padding: 0;
+  width: 50px;
+  aspect-ratio: 1;
+  transform: rotateZ(30deg);
+  position: absolute;
+  margin-left: 10px;
+  right: -20px;
+}
+.logo h1 {
+  margin: 0;
+  color: #146bdb;
+  text-align: center;
+  font-family: "Jua", sans-serif !important;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.logo h1 span {
+  color: #1158b6;
+}

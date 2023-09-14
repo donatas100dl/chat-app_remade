@@ -1,0 +1,54 @@
+.contact_person {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100px;
+  height: fit-content;
+  padding: 1rem 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  transition: all 0.1s linear;
+  position: relative;
+}
+.contact_person:hover {
+  background-color: var(--light-gray);
+}
+.contact_person .logo-name {
+  display: flex;
+  gap: 0.7rem;
+}
+.contact_person .logo-name container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+}
+.contact_person .logo-name h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+.contact_person .logo-name img {
+  width: 70px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.contact_person .croppted-img {
+  object-fit: cover;
+  width: fit-content;
+}
+
+.croppted-img img {
+  height: 64px;
+  width: 64px;
+}
+.contact_person .date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.contact_person .date .new-messages {
+  padding: 10px 15px;
+  background-color: var(--primary);
+  border-radius: 35%;
+}

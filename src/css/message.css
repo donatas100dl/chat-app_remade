@@ -1,0 +1,36 @@
+.message-container {
+    width: 100%;
+}
+.message {
+    max-width: 400px;
+    width: fit-content;
+    height: fit-content;
+    word-wrap: normal;
+    background-color: var(--secondary);
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 0.5rem 1rem;
+    color:black;
+    display: block;
+    align-items: center;
+
+    
+}
+.message span {
+    word-wrap: normal;
+    width: 200px;
+    font-weight:500;
+
+}
+.message p {
+    margin: 1rem;
+    font-size: 0.7rem;
+    font-weight:lighter;
+    float: right;
+}
+
+.your-message{
+background-color: var(--primary);
+float: right !important;
+color:rgb(255, 255, 255);
+}
