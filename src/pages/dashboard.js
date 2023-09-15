@@ -42,13 +42,13 @@ function Dashboard() {
             <img src={searchSvg} alt="search" />
           </div>
           <div className="contact-people-list">
-            <Contact_person isNew={true} last_seen={"Now"} />
+            <Contact_person isNew={true} last_seen={"Now"} img_link={"../assets/profile_placeholder.png"} />
             <Contact_person isNew={false} last_seen={"Nov 29"} />
-            <Contact_person isNew={true} last_seen={"Now"} />
+            <Contact_person isNew={true} last_seen={"Now" }  img_link={"../assets/profile_placeholder.png"}/>
             <Contact_person isNew={false} last_seen={"Dec 13"} />
-            <Contact_person isNew={true} last_seen={"Now"} />
+            <Contact_person isNew={true} last_seen={"Now"} img_link={"../assets/profile_placeholder.png"} />
             <Contact_person isNew={false} last_seen={"Nov 29"} />
-            <Contact_person isNew={true} last_seen={"Now"} />
+            <Contact_person isNew={true} last_seen={"Now"}  img_link={"../assets/profile_placeholder.png"}/>
             <Contact_person isNew={false} last_seen={"Dec 13"} />
             <Contact_person isNew={true} last_seen={"Now"} />
             <Contact_person isNew={false} last_seen={"Nov 29"} />

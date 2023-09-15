@@ -3,14 +3,18 @@
   width: 100%;
   min-height: 100px;
   height: fit-content;
-  padding: 1rem 0.5rem;
+  padding: 1rem;
+  padding-right: 7px;
   display: flex;
   justify-content: space-between;
   transition: all 0.1s linear;
   position: relative;
+  /* box-shadow: -11px 14px 38px -40px rgba(0,0,0); */
+  border-bottom: 1px solid rgba(173, 169, 169, 0.295);
 }
 .contact_person:hover {
-  background-color: var(--light-gray);
+  /* background-color: var(--light-gray); */
+  box-shadow: -11px 14px 38px 10px rgba(0, 0, 0, 0.1) inset;
 }
 .contact_person .logo-name {
   display: flex;
@@ -51,4 +55,18 @@
   padding: 10px 15px;
   background-color: var(--primary);
   border-radius: 35%;
+  box-shadow: -4px 1px 30px -10px rgba(0, 0, 0, 0.8);
+}
+
+/* media quarys */
+@media (max-width: 1399px) {
+  .contact_person .date,
+  .contact_person span,
+  .contact_person h1 {
+    display: none;
+  }
+  .contact_person {
+    border-bottom: none;
+    border-top: 1px solid rgba(173, 169, 169, 0.295);
+  }
 }

@@ -1,12 +1,13 @@
 import "../css/contact_person.css";
-function contact_person({ isNew, last_seen }) {
+function contact_person({ isNew, last_seen, img_link }) {
   if (isNew) {
   }
   return (
     <div className="contact_person">
       <div className="logo-name">
         <div className="croppted-img">
-          <img src={require("../assets/profile_placeholder_2.jpg")} alt="logo" />
+          {/* <img src={ img_link !== "" ? require(`${img_link}`) : require("../assets/profile_placeholder_2.jpg") } alt="logo"/> */}
+          <img src={require("../assets/profile_placeholder_2.jpg")} alt="logo"/>
         </div>
         <container>
           <h1>Pria Sharma</h1>
