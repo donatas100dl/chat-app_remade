@@ -30,3 +30,8 @@
 .logo h1 span {
   color: #1158b6;
 }
+.login-options {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}

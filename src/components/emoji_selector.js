@@ -13,7 +13,6 @@ function Emoji_selector({ handleClose, show }) {
         "https://emoji-api.com/emojis?access_key=224492bad558993db19cb855d4e7f349d5d765b4"
       )
       .then((res) => {
-        console.log(res.data);
         setEmojiList(res.data);
         setFilteredEmojiList(res.data); // Initialize filtered list with all emojis
       })
