@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
       const userData = await account.get();
       !userData ? navigate("/user/login") : setUser(userData);
       navigate("/")
-      console.log(userData)
     } catch (error) {
       //console.error(error);
     }
@@ -44,7 +43,6 @@ export const AuthProvider = ({ children }) => {
   };
   const handleUserLogout = async (e) => {
     e.preventDefault()
-    console.log("User logged out")
     setUser(null)
     await account.deleteSessions("current");
     navigate("/user/login");

@@ -96,7 +96,6 @@ function Dashboard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("input:", input)
     try{
       let input_array = input.split("");
       if (
@@ -192,7 +191,7 @@ function Dashboard() {
   //   );
   // };
   const chooseEmoji = (emoji) => {
-    console.log("choosen ",emoji + " ")
+
     setInput((prev) => prev + emoji);
   }
   return (
