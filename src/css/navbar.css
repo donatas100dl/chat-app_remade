@@ -12,7 +12,7 @@
   padding: 0 1rem;
   /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px, rgba(0, 0, 0, 0.1) inset, 0 1; */
 }
-.navbar::after{
+/* .navbar::after{
   content:'';
   position: absolute;
   width: 100%;
@@ -21,7 +21,7 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   bottom: 0;
   left: 0;
-}
+} */
 .navbar .navbar-logo {
     
 }

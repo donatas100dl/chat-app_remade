@@ -6,10 +6,11 @@ import {
   COLECTION_ID_MESSAGES,
 } from "../appWriteConfig.js";
 import { useEffect, useState } from "react";
-function Room({ message, isYours }) {
+
+function Room({ room_id }) {
   return (
     <div>
-        {"rooom" + " ID: 3459843509"}
+        {"rooom: " + room_id}
     </div>
   );
 }

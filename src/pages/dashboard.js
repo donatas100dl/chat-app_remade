@@ -12,16 +12,60 @@ import client, {
   databases,
   DATABASE_ID,
   COLECTION_ID_MESSAGES,
+  COLECTION_ID_ROOMS,
 } from "../appWriteConfig.js";
+import { useAuth } from "../uttils/authContext";
+import { useNavigate } from "react-router-dom";
+import Room from "./room";
+
 function Dashboard() {
   const [isShown, setIsShown] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const messageRef = useRef(null);
+
+  const rooms = [
+    {
+      user_id_1: "650883979ffda95ad7b6",
+      user_id_2: "6509dda83038c79d45db",
+      room_id: "the cooret room with deividas and me",
+      messages_obj_array: null,
+    },
+    {
+      user_id_1: "650883979ffda95ad7b6",
+      user_id_2: "sad785gf9sa894",
+      room_id: "sda897g5dsagf58s",
+      messages_obj_array: null,
+    },
+    {
+      user_id_1: "safdasfasdfsadfsdaf",
+      user_id_2: "asdsadasdas",
+      room_id: "sda897g5dsagf58s",
+      messages_obj_array: null,
+    },
+    {
+      user_id_1: "asdasfdasfsadgfsd",
+      user_id_2: "asdasdasdasdas",
+      room_id: "sda897g5dsagf58s",
+      messages_obj_array: null,
+    },
+  ];
+
+  const yourFriend = {
+    user_id: "6509dda83038c79d45db",
+    name: "deividas",
+  };
   const toggleEmoji = () => {
     setIsShown(!isShown);
   };
+
   useEffect(() => {
+    if (!user) {
+      navigate("/user/login");
+    }
+    // getAllMessages()
     getMessages();
     if (messageRef.current) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
@@ -38,12 +82,7 @@ function Dashboard() {
             "databases.*.collections.*.documents.*.create"
           )
         ) {
-          console.log("before: ", messages);
-          console.log("payload: ", response.payload);
-          // setMessages([...messages, ...response.payload])
-          // setMessages((prevMessages) => [...prevMessages, response.payload]);
-          setMessages(prev => [ ...prev, response.payload]);
-          console.log("after: ", messages);
+          setMessages((prev) => [...prev, response.payload]);
         }
       }
     );
@@ -57,18 +96,24 @@ function Dashboard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let input_array = input.split("");
-    if (
-      input_array.length > 200 ||
-      input === "" ||
-      input === undefined ||
-      input === null
-    ) {
-      alert("Invalid");
-      setInput("");
-      return;
+    console.log("input:", input)
+    try{
+      let input_array = input.split("");
+      if (
+       input_array.length > 200 ||
+        input === "" ||
+        input === undefined ||
+        input === null
+      ) {
+        alert("Invalid");
+        setInput("");
+        return;
+      }
+      postMessage(input);
     }
-    postMessage(input);
+    catch(err){
+      console.error(err);
+    }
   };
 
   const postMessage = (input) => {
@@ -78,16 +123,15 @@ function Dashboard() {
       ID.unique(),
       {
         body: input,
+        user_id: user.$id,
+        user_name: user.name,
       }
     );
-    // setMessages((prevMessages) => [
-    //   ...prevMessages,
-    //   { body: input, $id: ID.unique() },
-    // ]);
     setInput("");
   };
 
-  const deleteMessage = (id) => {
+  const deleteMessage = (e, id) => {
+    e.preventDefault();
     const res = databases.deleteDocument(
       DATABASE_ID,
       COLECTION_ID_MESSAGES,
@@ -95,7 +139,6 @@ function Dashboard() {
     );
     const updatedMessages = messages.filter((message) => message.$id !== id);
     setMessages(updatedMessages);
-    console.log("deleteMessage: ", res);
   };
 
   const getMessages = async () => {
@@ -103,14 +146,55 @@ function Dashboard() {
       DATABASE_ID,
       COLECTION_ID_MESSAGES
     );
-    console.log(res.documents);
     setMessages(res.documents);
   };
+  // const loadRoom = () => {
+  //   var your_rooms = rooms.filter(
+  //     (room) => room.user_id_1 === user.$id || room.user_id_2 === user.$id
+  //   );
+  //   if (your_rooms.length === 0) {
+  //     createRoom(user.$id, yourFriend.user_id);
+  //   } else {
+  //     var room = your_rooms.find(
+  //       (room) =>
+  //         room.user_id_1 === yourFriend.user_id ||
+  //         room.user_id_2 === yourFriend.user_id
+  //     );
 
-  function getRandomBoolean() {
-    return Math.random() < 0.5; 
+  //     if (!room) {
+  //       createRoom(user.$id, yourFriend.user_id);
+  //     } else {
+  //       console.log("loading room", room);
+  //     }
+  //   }
+  // };
+  // const createRoom = (user_id_1, user_id_2) => {
+  //   console.log(COLECTION_ID_ROOMS);
+
+  //   const test ={test:"Room created"};
+  //   const user_id = user.$id;
+  //   const user_name = user.name;
+  //   //const bodyEnum = {
+  //   //   body: body,
+  //   //   user_id: user_id,
+  //   //   user_name: user_name
+  //   // };
+  //   const roomData = {
+  //     user_id_1: user_id_1,
+  //     user_id_2: user_id_2,
+  //     iwhantodie: test,
+  //   };
+  //   const res = databases.createDocument(
+  //     DATABASE_ID,
+  //     "65086c3e0c17b752430f",
+  //     ID.unique(),
+  //     roomData
+  //   );
+  // };
+  const chooseEmoji = (emoji) => {
+    console.log("choosen ",emoji + " ")
+    setInput((prev) => prev + emoji);
   }
-
   return (
     <div className="dashboard">
       <Navbar />
@@ -118,7 +202,7 @@ function Dashboard() {
         <div className="contact">
           <div className="profile">
             <div className="profile-info">
-              <span>Your Name</span>
+              <span>{user.name}</span>
               <div className="profile-icon">
                 <img
                   width="50"
@@ -170,6 +254,8 @@ function Dashboard() {
           </div>
         </div>
         <div className="chat">
+          {/* {loadRoom()}
+          <Room room_id="73453475437" /> */}
           <div className="chat-nav">
             <div className="profile">
               <div className="profile-img">
@@ -198,17 +284,16 @@ function Dashboard() {
             ) : (
               messages.map((message) => (
                 <Message
-                  isYours={getRandomBoolean()}
+                  isYours={message.user_id === user.$id ? true : false}
                   key={message.$id}
+                  ID = {message.$id}
                   message={message.body}
-                  // onClick={deleteMessage(message.$id)}
+                  handleDelete={deleteMessage}
                 />
               ))
             )}
-
-            {/* <Message isYours={true}  message={"Throughout history,"}/>
-            <Message message={"ok,"}/> */}
           </div>
+
           <div className="chat-toolbar">
             <div className="input-container">
               <form onSubmit={handleSubmit}>
@@ -223,7 +308,7 @@ function Dashboard() {
             <div className="emoji" onClick={toggleEmoji}>
               <img src={smileSvg} alt="emojis" />
             </div>
-            <Emoji_selector show={isShown} handleClose={toggleEmoji} />
+            <Emoji_selector show={isShown} handleClose={toggleEmoji} handleChoose={chooseEmoji}/>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import "../css/emoji_selector.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function Emoji_selector({ handleClose, show }) {
+function Emoji_selector({ handleClose, show, handleChoose }) {
   const [emojiList, setEmojiList] = useState([]);
   const [input, setInput] = useState("");
   const [filteredEmojiList, setFilteredEmojiList] = useState([]);
@@ -32,6 +32,10 @@ function Emoji_selector({ handleClose, show }) {
   const handleChange = (e) => {
     setInput(e.target.value);
   };
+  const handleClick = (e, emoji) => {
+    e.preventDefault();
+    handleChoose(emoji)
+  }
 
   return (
     <div className={show ? "" : "hide"}>
@@ -46,7 +50,7 @@ function Emoji_selector({ handleClose, show }) {
           {!filteredEmojiList.length > 0
             ? "No emojis found"
             : filteredEmojiList.map((element) => (
-                <div key={element.slug} className="emoji">
+                <div key={element.slug} className="emoji" onClick={ (e) =>handleClick(e, element.character)}>
                   {element.character}
                 </div>
               ))}

@@ -52,6 +52,7 @@
   max-height: 20px;
   flex: 1;
   flex: 0 0 calc(33.33% - 20px);
+  cursor: pointer;
 }
 
 /* media quarys */
