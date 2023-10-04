@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { account } from "../appWriteConfig";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import Cookies from "js-cookie";
+const url = "http://localhost:4000";
 
 const AuthContext = createContext();
 
@@ -14,43 +18,73 @@ export const AuthProvider = ({ children }) => {
     getUserOnLoad();
   }, []);
 
+
   const getUserOnLoad = async () => {
     try {
-      const userData = await account.get();
-      !userData ? navigate("/user/login") : setUser(userData);
-      navigate("/")
+      const token = await getToken()
+      const res = await axios.get(`${url}/user/`, {
+        headers: { Authorization: "Bearer " +  token },
+      });
+      if (res) {
+        const userData = {
+          email: res.data.email,
+          name: res.data.name,
+          _id: res.data._id,
+          token: token
+        };
+        !userData ? navigate("/user/login") : setUser(userData);
+      }
+
+      navigate("/");
     } catch (error) {
       //console.error(error);
     }
     setLoading(false);
   };
 
+const getToken = async () => {
+ return await Cookies.get("userToken");
+}
+
   const handleLogin = async (e, loginInfo) => {
     e.preventDefault();
     try {
-      const res = await account.createEmailSession(
-        loginInfo.email,
-        loginInfo.password
-      );
-      if(res){
-        const userData = await account.get();
-        setUser(userData);
-        navigate("/");
-      }
+
+      axios
+        .post(`${url}/user/login`, {
+          email: loginInfo.email,
+          password: loginInfo.password,
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.data.token !== "") {
+            Cookies.set("userToken", res.data.token);
+          }
+          const userData = {
+            email: res.data.email,
+            name: res.data.name,
+            _id: res.data._id,
+            token: res.data.token
+          };
+          setUser(userData);
+          navigate("/");
+        });
     } catch (err) {
       console.error(err);
     }
   };
   const handleUserLogout = async (e) => {
-    e.preventDefault()
-    setUser(null)
-    await account.deleteSessions("current");
+    e.preventDefault();
+    setUser(null);
+    Cookies.remove("userToken");
     navigate("/user/login");
   };
   const contextData = {
     user,
+    url,
     handleLogin,
     handleUserLogout,
+    getToken,
   };
 
   return (

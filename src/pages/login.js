@@ -1,5 +1,6 @@
 import "../css/login.css";
 import { ID } from "appwrite";
+import axios from "axios";
 import {
   databases,
   DATABASE_ID,

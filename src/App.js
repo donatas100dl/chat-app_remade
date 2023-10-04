@@ -4,6 +4,7 @@ import PrivateRoutes from "./uttils/pivateRoutes";
 import Dashboard from "./pages/dashboard.js";
 import Login from "./pages/login";
 import { AuthProvider } from "./uttils/authContext";
+import { RoomProvider } from "./uttils/roomContext";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 const socket = io("http://localhost:4000/");
@@ -38,6 +39,7 @@ function App() {
     <div className="App">
       <button onClick={(e ) => handleClick(e)}>PRess meeeee</button>
         <AuthProvider>
+          <RoomProvider>
           <Routes>
 
             <Route path="/user/login" element={<Login />} />
@@ -46,6 +48,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
             </Route>
           </Routes>
+          </RoomProvider>
         </AuthProvider>
     </div>
   );
