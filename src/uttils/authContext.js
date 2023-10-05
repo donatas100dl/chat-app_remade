@@ -12,25 +12,24 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     setLoading(false);
     getUserOnLoad();
   }, []);
 
-
   const getUserOnLoad = async () => {
     try {
-      const token = await getToken()
+      const token = await getToken();
       const res = await axios.get(`${url}/user/`, {
-        headers: { Authorization: "Bearer " +  token },
+        headers: { Authorization: "Bearer " + token },
       });
       if (res) {
         const userData = {
           email: res.data.email,
           name: res.data.name,
           _id: res.data._id,
-          token: token
+          token: token,
         };
         !userData ? navigate("/user/login") : setUser(userData);
       }
@@ -42,14 +41,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-const getToken = async () => {
- return await Cookies.get("userToken");
-}
+  const getToken = async () => {
+    return await Cookies.get("userToken");
+  };
 
   const handleLogin = async (e, loginInfo) => {
     e.preventDefault();
     try {
-
       axios
         .post(`${url}/user/login`, {
           email: loginInfo.email,
@@ -64,7 +62,7 @@ const getToken = async () => {
             email: res.data.email,
             name: res.data.name,
             _id: res.data._id,
-            token: res.data.token
+            token: res.data.token,
           };
           setUser(userData);
           navigate("/");
@@ -79,12 +77,24 @@ const getToken = async () => {
     Cookies.remove("userToken");
     navigate("/user/login");
   };
+
+  const getAllUsers = async () => {
+    const res = await axios.get(`${url}/user/all`).then(res => {
+      if( res.data.users.length !== 0 ){
+        setUsers(res.data.users)
+        console.log(users)
+      }
+    })
+  }
+
   const contextData = {
     user,
+    users,
     url,
     handleLogin,
     handleUserLogout,
     getToken,
+    getAllUsers,
   };
 
   return (

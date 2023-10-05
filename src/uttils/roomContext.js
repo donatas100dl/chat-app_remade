@@ -17,18 +17,19 @@ export const RoomProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const loadRoom = async () => {
-    const res = await axios.get(`${url}/chat/all`, {
+  const loadRoom = async (user_id_1, user_id_2) => {
+    const res = await axios.post(`${url}/chat/`, {
       headers: {
         Authorization: `Bearer ${user.token}`,
-      },
-    });
-
-    if (res) {
-      console.log(res);
+      }
+    },
+    {
+      user_id_1:user_id_1,
+      user_id_2:user_id_2,
     }
-
-
+    ).then( res => {
+      console.log(res)
+    })
     // if (your_rooms.length === 0) {
     //   createRoom(user.$id, yourFriend.user_id);
     // } else {
