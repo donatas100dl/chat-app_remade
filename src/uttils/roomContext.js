@@ -25,25 +25,25 @@ export const RoomProvider = ({ children }) => {
     });
 
     if (res) {
-      console.log(res);
+      if (res.status === 202) {
+        createRoom(user.$id, clicked.user_id);
+      } else {
+        var room = your_rooms.find(
+          (room) =>
+            room.user_id_1 === clicked.user_id ||
+            room.user_id_2 === clicked.user_id
+        );
+  
+        if (!room) {
+          createRoom(user.$id, clicked.user_id);
+        } else {
+          console.log("loading room", room);
+        }
+      }
     }
 
 
-    // if (your_rooms.length === 0) {
-    //   createRoom(user.$id, yourFriend.user_id);
-    // } else {
-    //   var room = your_rooms.find(
-    //     (room) =>
-    //       room.user_id_1 === yourFriend.user_id ||
-    //       room.user_id_2 === yourFriend.user_id
-    //   );
-
-    //   if (!room) {
-    //     createRoom(user.$id, yourFriend.user_id);
-    //   } else {
-    //     console.log("loading room", room);
-    //   }
-    // }
+    
   };
 
   const createRoom = async (user_id_1, user_id_2) => {
