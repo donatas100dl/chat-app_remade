@@ -23,9 +23,10 @@ import axios from "axios";
 function Dashboard() {
   const [isShown, setIsShown] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [input, setInput] = useState("");
-  const { user, url } = useAuth();
-  const {createRoom, loadRoom} = useRoom();
+  const { user, url, getAllUsers, users } = useAuth();
+  const { createRoom, loadRoom } = useRoom();
   const navigate = useNavigate();
   const messageRef = useRef(null);
 
@@ -68,10 +69,12 @@ function Dashboard() {
     if (!user) {
       navigate("/user/login");
     }
-    getMessages();
+    getAllUsers();
+    console.log(users);
     if (messageRef.current) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
     }
+    
   }, []);
 
   useEffect(() => {
@@ -79,6 +82,16 @@ function Dashboard() {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    console.log("udated users", users)
+    if (users.length !== 0 && users) {
+      const data =  users.filter((selectedUser) => selectedUser._id !== user._id)
+
+      console.log(data);
+      setAllUsers(data)
+    }
+  }, [users]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -102,8 +115,12 @@ function Dashboard() {
 
   const postMessage = (input) => {
     // createRoom(user.id, yourFriend.id, messages)
-    loadRoom()
     setInput("");
+  };
+
+  const getSelectedUser = (user_1) => {
+    console.log(user._id, user_1._id);
+    loadRoom(user._id, user_1._id);
   };
 
   const deleteMessage = (e, id) => {
@@ -158,34 +175,19 @@ function Dashboard() {
             <img src={searchSvg} alt="search" />
           </div>
           <div className="contact-people-list">
-            <Contact_person
-              isNew={true}
-              last_seen={"Now"}
-              img_link={"../assets/profile_placeholder.png"}
-            />
-            <Contact_person isNew={false} last_seen={"Nov 29"} />
-            <Contact_person
-              isNew={true}
-              last_seen={"Now"}
-              img_link={"../assets/profile_placeholder.png"}
-            />
-            <Contact_person isNew={false} last_seen={"Dec 13"} />
-            <Contact_person
-              isNew={true}
-              last_seen={"Now"}
-              img_link={"../assets/profile_placeholder.png"}
-            />
-            <Contact_person isNew={false} last_seen={"Nov 29"} />
-            <Contact_person
-              isNew={true}
-              last_seen={"Now"}
-              img_link={"../assets/profile_placeholder.png"}
-            />
-            <Contact_person isNew={false} last_seen={"Dec 13"} />
-            <Contact_person isNew={true} last_seen={"Now"} />
-            <Contact_person isNew={false} last_seen={"Nov 29"} />
-            <Contact_person isNew={true} last_seen={"Now"} />
-            <Contact_person isNew={false} last_seen={"Dec 13"} />
+            {!users || users.length === 0 ? (
+              <Contact_person isNew={false} last_seen={"Dec 13"} />
+            ) : (
+              users.map((user_1) => (
+                <Contact_person
+                  isNew={true}
+                  last_seen={"Dec 13"}
+                  user={user_1}
+                  key={user_1._id}
+                  handleSelect={getSelectedUser}
+                />
+              ))
+            )}
           </div>
         </div>
         <div className="chat">
