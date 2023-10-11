@@ -20,107 +20,90 @@ import { useNavigate } from "react-router-dom";
 import Room from "./room";
 import axios from "axios";
 
-function Dashboard() {
+function Dashboard({socket}) {
   const [isShown, setIsShown] = useState(false);
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [input, setInput] = useState("");
+  const [room, setRoom] = useState(null);
   const { user, url, getAllUsers, users } = useAuth();
-  const { createRoom, loadRoom } = useRoom();
+  const { loadRoom, updateMessages } = useRoom();
   const navigate = useNavigate();
   const messageRef = useRef(null);
-
-  const rooms = [
-    {
-      user_id_1: "650883979ffda95ad7b6",
-      user_id_2: "6509dda83038c79d45db",
-      room_id: "the cooret room with deividas and me",
-      messages_obj_array: null,
-    },
-    {
-      user_id_1: "650883979ffda95ad7b6",
-      user_id_2: "sad785gf9sa894",
-      room_id: "sda897g5dsagf58s",
-      messages_obj_array: null,
-    },
-    {
-      user_id_1: "safdasfasdfsadfsdaf",
-      user_id_2: "asdsadasdas",
-      room_id: "sda897g5dsagf58s",
-      messages_obj_array: null,
-    },
-    {
-      user_id_1: "asdasfdasfsadgfsd",
-      user_id_2: "asdasdasdasdas",
-      room_id: "sda897g5dsagf58s",
-      messages_obj_array: null,
-    },
-  ];
-
-  const yourFriend = {
-    user_id: "651d948a41a26571d077587b",
-    name: "deividas",
-  };
-  const toggleEmoji = () => {
-    setIsShown(!isShown);
-  };
 
   useEffect(() => {
     if (!user) {
       navigate("/user/login");
     }
     getAllUsers();
-    console.log(users);
     if (messageRef.current) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
     }
-    
   }, []);
 
   useEffect(() => {
     if (messageRef.current) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
     }
-  }, [messages]);
+    // socket.on("gottenMessage", (data) => {
+    //   console.log("you recive message ", data.message, "from user: ", data.user.name);
+    // });
+  }, [messages, socket]);
 
   useEffect(() => {
-    console.log("udated users", users)
     if (users.length !== 0 && users) {
-      const data =  users.filter((selectedUser) => selectedUser._id !== user._id)
-
-      console.log(data);
-      setAllUsers(data)
+      const data = users.filter(
+        (selectedUser) => selectedUser._id !== user._id
+      );
+      setAllUsers(data);
     }
-  }, [users]);
+    if (room) {
+      setMessages(room.messages);
+    }
+  }, [users, room]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      let input_array = input.split("");
-      if (
-        input_array.length > 200 ||
-        input === "" ||
-        input === undefined ||
-        input === null
-      ) {
-        alert("Invalid");
-        setInput("");
-        return;
-      }
-      postMessage(input);
-    } catch (err) {
-      console.error(err);
+    let input_array = input.split("");
+    if (
+      input_array.length > 200 ||
+      input === "" ||
+      input === undefined ||
+      input === null
+    ) {
+      alert("Invalid");
+      setInput("");
+      return;
+    }
+    postMessage(input, room);
+  };
+
+  const toggleEmoji = () => {
+    setIsShown(!isShown);
+  };
+
+  const postMessage = (message, room) => {
+    if (room) {
+      updateMessages(input, room); // send to database
+      setMessages((prev) => prev, message); // update client side
+      const data = {
+        room_id: room._id,
+        message: message,
+        user: user,
+      };
+      // socket.emit("newMessage", data, loadMessageCallback);
+      setInput("");
     }
   };
 
-  const postMessage = (input) => {
-    // createRoom(user.id, yourFriend.id, messages)
-    setInput("");
+  const loadMessageCallback = (msg) => {
+    console.log(msg)
   };
 
-  const getSelectedUser = (user_1) => {
-    console.log(user._id, user_1._id);
-    loadRoom(user._id, user_1._id);
+  const getSelectedUser = async (user_1) => {
+    const loadedRoom = await loadRoom(user._id, user_1._id);
+    // socket.emit("joinRoom", { id: loadedRoom._id },loadMessageCallback);
+    setRoom(loadedRoom);
   };
 
   const deleteMessage = (e, id) => {
@@ -134,16 +117,6 @@ function Dashboard() {
     setMessages(updatedMessages);
   };
 
-  const getMessages = async () => {
-    const res = await databases.listDocuments(
-      DATABASE_ID,
-      COLECTION_ID_MESSAGES
-    );
-    setMessages(res.documents);
-  };
-
-  //rooms
-
   const chooseEmoji = (emoji) => {
     setInput((prev) => prev + emoji);
   };
@@ -154,7 +127,7 @@ function Dashboard() {
         <div className="contact">
           <div className="profile">
             <div className="profile-info">
-              <span>{user.name}</span>
+              <span>{user && user.name.length > 0 ? user.name : ""}</span>
               <div className="profile-icon">
                 <img
                   width="50"
@@ -175,24 +148,20 @@ function Dashboard() {
             <img src={searchSvg} alt="search" />
           </div>
           <div className="contact-people-list">
-            {!users || users.length === 0 ? (
-              <Contact_person isNew={false} last_seen={"Dec 13"} />
-            ) : (
-              users.map((user_1) => (
-                <Contact_person
-                  isNew={true}
-                  last_seen={"Dec 13"}
-                  user={user_1}
-                  key={user_1._id}
-                  handleSelect={getSelectedUser}
-                />
-              ))
-            )}
+            {!allUsers || allUsers.length === 0
+              ? "no user found"
+              : allUsers.map((user_1) => (
+                  <Contact_person
+                    isNew={true}
+                    last_seen={"Dec 13"}
+                    user={user_1}
+                    key={user_1._id}
+                    handleSelect={getSelectedUser}
+                  />
+                ))}
           </div>
         </div>
         <div className="chat">
-          {/* {loadRoom()}
-          <Room room_id="73453475437" /> */}
           <div className="chat-nav">
             <div className="profile">
               <div className="profile-img">
@@ -212,25 +181,12 @@ function Dashboard() {
             </div>
           </div>
           <div className="chat-main" ref={messageRef}>
-            {messages.length < 0 || messages.length === undefined ? (
-              <Message
-                isYours={true}
-                key={324535}
-                message={"Loading messages..."}
-              />
+            {!room ? (
+              <>{"no room loaded"}</>
             ) : (
-              messages.map((message) => (
-                <Message
-                  isYours={message.user_id === user.$id ? true : false}
-                  key={message.$id}
-                  ID={message.$id}
-                  message={message.body}
-                  handleDelete={deleteMessage}
-                />
-              ))
+              <Room room={room} messages={messages} />
             )}
           </div>
-
           <div className="chat-toolbar">
             <div className="input-container">
               <form onSubmit={handleSubmit}>

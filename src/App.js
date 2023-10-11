@@ -5,48 +5,21 @@ import Dashboard from "./pages/dashboard.js";
 import Login from "./pages/login";
 import { AuthProvider } from "./uttils/authContext";
 import { RoomProvider } from "./uttils/roomContext";
-import { io } from "socket.io-client";
 import { useEffect } from "react";
-const socket = io("http://localhost:4000/");
-
-
-
-
+import RoomRouting from "./components/roomRouting";
+// import { io } from "socket.io-client";
 
 function App() {
-
-  socket.on("connect", () => {
-    console.log(socket.id);
-  });
-
-  const handleClick = (e) => {
-    e.preventDefault()
-    socket.emit("sendMessage", `hello world im client: ${socket.id}`,logMessage)
-  }
-
-  const logMessage = (msg) => {
-    console.log(msg)
-  }
-  
-  useEffect(() => {
-  socket.on("brodcastMessage", (data) => {
-    console.log(data)
-  })
-
-  }, [socket])
-
+  console.log("loading... app");
+  // const socket = io("http://localhost:4000/");
+  const socket = null;
   return (
     <div className="App">
-      <button onClick={(e ) => handleClick(e)}>PRess meeeee</button>
         <AuthProvider>
           <RoomProvider>
           <Routes>
-
             <Route path="/user/login" element={<Login />} />
-
-            <Route element={<PrivateRoutes />}>
-              <Route path="/" element={<Dashboard />} />
-            </Route>
+              <Route path="/" element={<Dashboard socket={socket} />} />
           </Routes>
           </RoomProvider>
         </AuthProvider>

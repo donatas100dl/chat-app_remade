@@ -12,63 +12,66 @@ const RoomContext = createContext();
 export const RoomProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { user} = useAuth();
+  const [room, setRoom] = useState(null);
+  const { user } = useAuth();
   useEffect(() => {
     setLoading(false);
   }, []);
 
   const loadRoom = async (user_id_1, user_id_2) => {
-    const res = await axios.post(`${url}/chat/`, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
+    const res = await axios.post(
+      `${url}/chat/`,
+      {
+        user_id_1: user_id_1,
+        user_id_2: user_id_2,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       }
-    },
-    {
-      user_id_1:user_id_1,
-      user_id_2:user_id_2,
-    }
-    ).then( res => {
-      console.log(res)
-    })
-    // if (your_rooms.length === 0) {
-    //   createRoom(user.$id, yourFriend.user_id);
-    // } else {
-    //   var room = your_rooms.find(
-    //     (room) =>
-    //       room.user_id_1 === yourFriend.user_id ||
-    //       room.user_id_2 === yourFriend.user_id
-    //   );
-
-    //   if (!room) {
-    //     createRoom(user.$id, yourFriend.user_id);
-    //   } else {
-    //     console.log("loading room", room);
-    //   }
-    // }
+    );
+    return res.data.room;
   };
 
-  const createRoom = async (user_id_1, user_id_2) => {
-    const user_id = user.$id;
-    const user_name = user.name;
+  const getRoomByID = async (roomId) => {
+    axios
+      .get(`${url}/chat/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+      .then((res) => {
+        return res.data.room;
+      });
+  };
 
-    const roomData = {
-      user_id_1: user_id_1,
-      user_id_2: user_id_2,
-    };
-    const res = await axios.post(`${url}/chat/create`, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
+  const updateMessages = async (message, room) => {
+    const res = await axios.put(
+      `${url}/chat/update/${room._id}`,
+      {
+        user_id_1: room.user_id_1,
+        user_id_2: room.user_id_2,
+        messages: [
+          {
+            user_id: user._id,
+            body: message,
+          },
+        ],
       },
-    });
-
-    if (res) {
-      console.log(res);
+      {
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    );
+    if(res){
+     return res.data.room
     }
   };
 
   const contextData = {
     loadRoom,
-    createRoom,
+    getRoomByID,
+    updateMessages,
   };
 
   return (

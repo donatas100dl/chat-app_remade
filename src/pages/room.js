@@ -6,11 +6,17 @@ import {
   COLECTION_ID_MESSAGES,
 } from "../appWriteConfig.js";
 import { useEffect, useState } from "react";
-
-function Room({ room_id }) {
+import Message from "../components/message.js";
+import { io } from "socket.io-client";
+function Room({ room, messages }) {
+  const socket = io("http://localhost:4000/");
+  
   return (
-    <div>
-        {"rooom: " + room_id}
+    <div className="chat-main">
+      <>{`room id: ${room._id}`}</>
+      {room && messages.length > 0
+        ? messages.map((msg) => <Message message={msg} key={msg._id}/>)
+        : " no messages found"}
     </div>
   );
 }

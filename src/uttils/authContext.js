@@ -82,7 +82,6 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.get(`${url}/user/all`).then(res => {
       if( res.data.users.length !== 0 ){
         setUsers(res.data.users)
-        console.log(users)
       }
     })
   }

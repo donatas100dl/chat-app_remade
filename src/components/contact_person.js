@@ -14,10 +14,10 @@ function contact_person({ isNew, last_seen, user, handleSelect }) {
             alt="logo"
           />
         </div>
-        <container>
+        <div className="container">
           <h1>{user ? user.name : "name"}</h1>
           <span>Listening to Spotify</span>
-        </container>
+        </div>
       </div>
       <div className="date">
         <span>{last_seen}</span>
