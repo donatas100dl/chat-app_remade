@@ -7,22 +7,21 @@ import { AuthProvider } from "./uttils/authContext";
 import { RoomProvider } from "./uttils/roomContext";
 import { useEffect } from "react";
 import RoomRouting from "./components/roomRouting";
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 
 function App() {
   console.log("loading... app");
-  // const socket = io("http://localhost:4000/");
-  const socket = null;
+  const socket = io("http://localhost:4000/");
   return (
     <div className="App">
-        <AuthProvider>
-          <RoomProvider>
+      <AuthProvider>
+        <RoomProvider>
           <Routes>
             <Route path="/user/login" element={<Login />} />
-              <Route path="/" element={<Dashboard socket={socket} />} />
-          </Routes>
-          </RoomProvider>
-        </AuthProvider>
+            <Route path="/" element={<Dashboard socket={socket} />} />
+           </Routes>
+        </RoomProvider>
+      </AuthProvider>
     </div>
   );
 }

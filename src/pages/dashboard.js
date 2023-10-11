@@ -6,7 +6,7 @@ import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person";
 import Message from "../components/message";
 import smileSvg from "../assets/smile-face.svg";
-import Emoji_selector from "../components/emoji_selector";
+//import Emoji_selector from "../components/emoji_selector";
 import { ID } from "appwrite";
 import client, {
   databases,
@@ -26,12 +26,16 @@ function Dashboard({socket}) {
   const [allUsers, setAllUsers] = useState([]);
   const [input, setInput] = useState("");
   const [room, setRoom] = useState(null);
-  const { user, url, getAllUsers, users } = useAuth();
+  const { user, url, loading, getAllUsers, users } = useAuth();
   const { loadRoom, updateMessages } = useRoom();
   const navigate = useNavigate();
   const messageRef = useRef(null);
-
   useEffect(() => {
+    if(!loading){
+      socket.on("gottenMessage", (data) => {
+        console.log("you recive message ", data.message, "from user: ", data.user.name);
+      });
+    }
     if (!user) {
       navigate("/user/login");
     }
@@ -45,10 +49,7 @@ function Dashboard({socket}) {
     if (messageRef.current) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
     }
-    // socket.on("gottenMessage", (data) => {
-    //   console.log("you recive message ", data.message, "from user: ", data.user.name);
-    // });
-  }, [messages, socket]);
+  }, [messages]);
 
   useEffect(() => {
     if (users.length !== 0 && users) {
@@ -91,7 +92,7 @@ function Dashboard({socket}) {
         message: message,
         user: user,
       };
-      // socket.emit("newMessage", data, loadMessageCallback);
+      socket.emit("newMessage", data, loadMessageCallback);
       setInput("");
     }
   };
@@ -102,7 +103,7 @@ function Dashboard({socket}) {
 
   const getSelectedUser = async (user_1) => {
     const loadedRoom = await loadRoom(user._id, user_1._id);
-    // socket.emit("joinRoom", { id: loadedRoom._id },loadMessageCallback);
+    socket.emit("joinRoom", { id: loadedRoom._id },loadMessageCallback);
     setRoom(loadedRoom);
   };
 
@@ -201,11 +202,11 @@ function Dashboard({socket}) {
             <div className="emoji" onClick={toggleEmoji}>
               <img src={smileSvg} alt="emojis" />
             </div>
-            <Emoji_selector
+            {/* <Emoji_selector
               show={isShown}
               handleClose={toggleEmoji}
               handleChoose={chooseEmoji}
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -7,10 +7,7 @@ import {
 } from "../appWriteConfig.js";
 import { useEffect, useState } from "react";
 import Message from "../components/message.js";
-import { io } from "socket.io-client";
 function Room({ room, messages }) {
-  const socket = io("http://localhost:4000/");
-  
   return (
     <div className="chat-main">
       <>{`room id: ${room._id}`}</>

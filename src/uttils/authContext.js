@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { account } from "../appWriteConfig";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    setLoading(false);
     getUserOnLoad();
   }, []);
 
@@ -33,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         };
         !userData ? navigate("/user/login") : setUser(userData);
       }
-
+      setLoading(false);
       navigate("/");
     } catch (error) {
       //console.error(error);
@@ -86,16 +85,16 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
-  const contextData = {
+  const contextData = useMemo(() => ({
     user,
     users,
     url,
+    loading,
     handleLogin,
     handleUserLogout,
     getToken,
     getAllUsers,
-  };
-
+  }), [user, users, url, handleLogin, handleUserLogout, getToken, getAllUsers]);
   return (
     <AuthContext.Provider value={contextData}>
       {loading ? <p>loading...</p> : children}
