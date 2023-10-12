@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import Message from "../components/message.js";
 function Room({ room, messages }) {
+  
   return (
     <div className="chat-main">
       <>{`room id: ${room._id}`}</>

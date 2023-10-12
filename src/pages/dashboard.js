@@ -6,7 +6,7 @@ import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person";
 import Message from "../components/message";
 import smileSvg from "../assets/smile-face.svg";
-//import Emoji_selector from "../components/emoji_selector";
+import Emoji_selector from "../components/emoji_selector";
 import { ID } from "appwrite";
 import client, {
   databases,
@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import Room from "./room";
 import axios from "axios";
 
-function Dashboard({socket}) {
+function Dashboard({ socket }) {
   const [isShown, setIsShown] = useState(false);
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
@@ -31,9 +31,22 @@ function Dashboard({socket}) {
   const navigate = useNavigate();
   const messageRef = useRef(null);
   useEffect(() => {
-    if(!loading){
+    if (!loading) {
       socket.on("gottenMessage", (data) => {
-        console.log("you recive message ", data.message, "from user: ", data.user.name);
+        console.log(
+          "you recive message ",
+          data.message,
+          "from user: ",
+          data.user.name
+        );
+        const message = {
+          user_id: data.user._id,
+          _id: Math.floor(Math.random() * 999999),
+          body: data.message,
+          date: "2023-10-11T13:55:22.751Z",
+        };
+        console.log(messages);
+        setMessages((prev) => [...prev, message]);
       });
     }
     if (!user) {
@@ -49,6 +62,7 @@ function Dashboard({socket}) {
     if (messageRef.current) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
     }
+    console.log("rerender: ", messages);
   }, [messages]);
 
   useEffect(() => {
@@ -86,7 +100,14 @@ function Dashboard({socket}) {
   const postMessage = (message, room) => {
     if (room) {
       updateMessages(input, room); // send to database
-      setMessages((prev) => prev, message); // update client side
+      const newMessage = {
+        body: message,
+        user_id: user._id,
+        _id: Math.floor(Math.random() * 999999),
+        date: "2023-10-11T13:55:22.751Z",
+      };
+      console.log("updating: ", messages, " message: ", newMessage);
+      setMessages((prev) => [...prev, newMessage]); // update client side
       const data = {
         room_id: room._id,
         message: message,
@@ -98,12 +119,12 @@ function Dashboard({socket}) {
   };
 
   const loadMessageCallback = (msg) => {
-    console.log(msg)
+    console.log(msg);
   };
 
   const getSelectedUser = async (user_1) => {
     const loadedRoom = await loadRoom(user._id, user_1._id);
-    socket.emit("joinRoom", { id: loadedRoom._id },loadMessageCallback);
+    socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
     setRoom(loadedRoom);
   };
 
@@ -185,7 +206,7 @@ function Dashboard({socket}) {
             {!room ? (
               <>{"no room loaded"}</>
             ) : (
-              <Room room={room} messages={messages} />
+              <Room room={room} messages={messages} messageRef={messageRef} />
             )}
           </div>
           <div className="chat-toolbar">
@@ -202,11 +223,11 @@ function Dashboard({socket}) {
             <div className="emoji" onClick={toggleEmoji}>
               <img src={smileSvg} alt="emojis" />
             </div>
-            {/* <Emoji_selector
+            <Emoji_selector
               show={isShown}
               handleClose={toggleEmoji}
               handleChoose={chooseEmoji}
-            /> */}
+            />
           </div>
         </div>
       </div>
