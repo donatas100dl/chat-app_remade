@@ -15,6 +15,7 @@ const [loginInfo, setLoginInfo] = useState({
   password: "",
 })
 const {user, handleLogin} = useAuth();
+const [isSuccess, setIsSuccess] = useState(true)
 const navigate = useNavigate();
 
 useEffect( () => {
@@ -29,18 +30,28 @@ const handleOnchange = (e) => {
   setLoginInfo({...loginInfo, [name]:data} )
 }
 
+const handleSubit = async (e) => {
+ const error = await handleLogin(e, loginInfo)
+
+ if(error&&error.err){
+  setIsSuccess(false)
+ }
+}
+
   return (
     <div className="login-wrapper">
       <div className="login-main">
         <h1>Login</h1>
-        <form onSubmit={(e) => handleLogin(e, loginInfo)}>
+        <form onSubmit={(e) => handleSubit(e)}>
           <div className="login-email">
             <span>Email</span>
             <input type="text" placeholder="enter your email" name="email" onChange={handleOnchange} />
+            <p className={isSuccess ? "d-none": "invalid"}>Invalid Email</p>
           </div>
           <div className="login-password">
             <span>Password</span>
             <input type="password" placeholder="enter your password" name="password" onChange={handleOnchange}/>
+            <p className={isSuccess ? "d-none": "invalid"}>Invalid Password</p>
           </div>
           <button>Login</button>
         </form>
@@ -56,7 +67,7 @@ const handleOnchange = (e) => {
                 <img src={require("../assets/instagram.png")}/>
                 </div>
             </div>
-            <p>Already a user? <a href="#">LOGIN</a></p>
+            <p className="nav-register">Already a user? <a href="#">LOGIN</a></p>
       </div>
     </div>
   );

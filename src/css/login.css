@@ -8,8 +8,8 @@
 }
 .login-main{
     width: 20rem;
-    height: 30rem;
-    padding: 2rem;
+    height: 32rem;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
     background-color: var(--background);
@@ -26,6 +26,14 @@
 }
 .login-main form span {
     margin-left: 3px;
+    font-size: 1rem;
+}
+.login-email .invalid, .login-password .invalid{
+    float: left;
+    margin: 0;
+    margin-left: 3px;
+    font-size: .9rem;
+    color: red;
 }
 .login-main h1 {
     font-weight:500;
@@ -90,7 +98,7 @@
     background-color: var(--background);
     padding: 0.1rem;
 }
-.login-main p {
+.login-main .nav-register {
     justify-self: center;
     align-self: center;
 }
