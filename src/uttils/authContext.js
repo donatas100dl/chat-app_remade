@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState("dark");
   const [users, setUsers] = useState([]);
   useEffect(() => {
     getUserOnLoad();
@@ -45,6 +46,13 @@ export const AuthProvider = ({ children }) => {
   const getToken = async () => {
     return await Cookies.get("userToken");
   };
+  const handleGetTheme = async () => {
+    return await Cookies.get("userTheme");
+  }
+  const handleSetTheme = async (theme) => {
+    Cookies.set("userTheme",theme);
+    handleGetTheme()
+  }
 
   const handleLogin = async (e, loginInfo) => {
     e.preventDefault();

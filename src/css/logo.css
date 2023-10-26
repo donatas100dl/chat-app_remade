@@ -19,7 +19,7 @@
 }
 .logo h1 {
   margin: 0;
-  color: #146bdb;
+  color: var(--logo-primary);
   text-align: center;
   font-family: "Jua", sans-serif !important;
   font-size: 2rem;
@@ -28,7 +28,7 @@
   line-height: normal;
 }
 .logo h1 span {
-  color: #1158b6;
+  color: var(--logo-secondary);
 }
 .login-options {
   display: flex;

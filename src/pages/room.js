@@ -22,7 +22,6 @@ function Room({ room, messages, handleGetDate }) {
 
   return (
     <div className="chat-main" ref={messageRef}>
-      <>{`room id: ${room._id}`}</>
       {room && messages.length > 0
         ? messages.map((msg) => <Message message={msg} key={msg._id}/>)
         : " no messages found"}

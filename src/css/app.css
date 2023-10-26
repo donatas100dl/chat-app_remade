@@ -1,4 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&family=Montserrat:wght@100;300&family=Nunito+Sans:wght@300&family=Work+Sans:wght@400;700;900&display=swap");
+
+body [data-theme="mixed"] {
+  --color-primary-100: #2079ee;
+  --color-primary-200: #4f87f0;
+  --color-primary-300: #6c95f3;
+  --color-primary-400: #85a3f5;
+  --color-primary-500: #9cb2f7;
+  --color-primary-600: #b1c1f9;
+  /** CSS DARK THEME SURFACE COLORS */
+  --color-surface-100: #0a1236;
+  --color-surface-200: #24274a;
+  --color-surface-300: #3d3e5e;
+  --color-surface-400: #050505;
+  --color-surface-500: #71708a;
+  --color-surface-600: #8c8ba0;
+   /** CSS DARK THEME MIXED SURFACE COLORS */
+  --color-surface-mixed-100: #15387a;
+  --color-surface-mixed-200: #374b88;
+  --color-surface-mixed-300: #515f97;
+  --color-surface-mixed-400: #6a74a5;
+  --color-surface-mixed-500: #828ab4;
+  --color-surface-mixed-600: #9ba0c3;
+}
+
 :root {
   --text: #030e1c;
   --background: #f0f6ff;
@@ -6,11 +30,23 @@
   --primary: #74c0e4c4;
   --blue: #00aeff;
   --secondary: #c2daf9;
+  --red: red;
   --accent: #146bdb;
   --blue: #2079eee3;
-  --light-gray:#d6d6d6;
-  /* --body-background: #1ffffb; */
-  --body-background:#2079ee;
+  --light-gray: #d6d6d6;
+  --body-background: #2079ee;
+  --logo-primary: #146bdb;
+  --logo-secondary: #1158b6;
+  --gray: gray;
+}
+
+[data-theme="dark"] {
+  --body-background: #2079ee;
+  --blue: #2079eee3;
+  --light-gray: #d6d6d6;
+  --primary: #74c0e4c4;
+  --background: #f0f6ff;
+  --light-blue: #d5e6fb;
 }
 
 body,
@@ -34,7 +70,12 @@ html {
   display: flex;
   flex-direction: column;
 }
-.d-none{
+span,
+p,
+h1 {
+  color: var(--text);
+}
+.d-none {
   display: none;
 }
 input:focus {
@@ -59,8 +100,8 @@ input:focus {
 ::-webkit-scrollbar-track {
   background-color: transparent; /* Hide the track */
 }
-.shadow{
-  box-shadow: -11px 14px 38px -40px rgba(0,0,0);
+.shadow {
+  box-shadow: -11px 14px 38px -40px rgba(0, 0, 0);
 }
 
 .protected-routes {
