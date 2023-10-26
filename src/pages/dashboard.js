@@ -18,34 +18,30 @@ import { useAuth } from "../uttils/authContext";
 import { useRoom } from "../uttils/roomContext";
 import { useNavigate } from "react-router-dom";
 import Room from "./room";
-import axios from "axios";
-
+import { useSwipeable } from "react-swipeable";
 function Dashboard({ socket }) {
   const [isShown, setIsShown] = useState(false);
   const [messages, setMessages] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [input, setInput] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
   const [room, setRoom] = useState(null);
+  const [lastestMassage, setLastestMassage] = useState("");
+  const [expandContactList, setExpandContactList] = useState(false);
+
   const { user, url, loading, getAllUsers, users } = useAuth();
   const { loadRoom, updateMessages } = useRoom();
   const navigate = useNavigate();
-  const messageRef = useRef(null);
+  const real_time = new Date();
   useEffect(() => {
     if (!loading) {
       socket.on("gottenMessage", (data) => {
-        console.log(
-          "you recive message ",
-          data.message,
-          "from user: ",
-          data.user.name
-        );
         const message = {
           user_id: data.user._id,
           _id: Math.floor(Math.random() * 999999),
           body: data.message,
-          date: "2023-10-11T13:55:22.751Z",
+          date: real_time,
         };
-        console.log(messages);
         setMessages((prev) => [...prev, message]);
       });
     }
@@ -53,17 +49,7 @@ function Dashboard({ socket }) {
       navigate("/user/login");
     }
     getAllUsers();
-    if (messageRef.current) {
-      messageRef.current.scrollTop = messageRef.current.scrollHeight;
-    }
   }, []);
-
-  useEffect(() => {
-    if (messageRef.current) {
-      messageRef.current.scrollTop = messageRef.current.scrollHeight;
-    }
-    console.log("rerender: ", messages);
-  }, [messages]);
 
   useEffect(() => {
     if (users.length !== 0 && users) {
@@ -104,9 +90,8 @@ function Dashboard({ socket }) {
         body: message,
         user_id: user._id,
         _id: Math.floor(Math.random() * 999999),
-        date: "2023-10-11T13:55:22.751Z",
+        date: real_time,
       };
-      console.log("updating: ", messages, " message: ", newMessage);
       setMessages((prev) => [...prev, newMessage]); // update client side
       const data = {
         room_id: room._id,
@@ -118,11 +103,11 @@ function Dashboard({ socket }) {
     }
   };
 
-  const loadMessageCallback = (msg) => {
-    console.log(msg);
-  };
+  const loadMessageCallback = (msg) => {};
 
   const getSelectedUser = async (user_1) => {
+    setSelectedUser(user_1);
+    console.log(user_1);
     const loadedRoom = await loadRoom(user._id, user_1._id);
     socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
     setRoom(loadedRoom);
@@ -142,11 +127,61 @@ function Dashboard({ socket }) {
   const chooseEmoji = (emoji) => {
     setInput((prev) => prev + emoji);
   };
+  function calculateTimeAgo(timestamp) {
+    const currentTimestamp = Date.now();
+    const messageTimestamp = new Date(timestamp).getTime();
+    const differenceInMilliseconds = currentTimestamp - messageTimestamp;
+    const seconds = Math.floor(differenceInMilliseconds / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return days + " days ago";
+    } else if (hours > 0) {
+      return hours + " hours ago";
+    } else if (minutes > 0) {
+      return minutes + " minutes ago";
+    } else {
+      return seconds + " seconds ago";
+    }
+  }
+
+  const getLatestMessageDate = (date) => {
+    setLastestMassage(calculateTimeAgo(date));
+  };
+
+  const handleExpandContact = () => {
+    setExpandContactList(!expandContactList);
+    console.log(!expandContactList);
+  };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      console.log('Swiped Left');
+      setExpandContactList(false);
+      // You can add other logic when swiped left here
+    },
+    onSwipedRight: () => {
+      console.log('Swiped right');
+      setExpandContactList(true);
+      // You can add other logic when swiped right here
+    },
+  });
+
   return (
-    <div className="dashboard">
+    <div
+      className="dashboard"
+      {...handlers}
+    >
       <Navbar />
       <div className="dashboard-main">
-        <div className="contact">
+        <div
+          className={
+            expandContactList ? "contact" : "contact collapsed-contact"
+          }
+          onClick={handleExpandContact}
+        >
           <div className="profile">
             <div className="profile-info">
               <span>{user && user.name.length > 0 ? user.name : ""}</span>
@@ -193,8 +228,12 @@ function Dashboard({ socket }) {
                 />
               </div>
               <section>
-                <span>Priya Sharma</span>
-                <p>Today at 2:30pm</p>
+                <span>
+                  {selectedUser && selectedUser.name.length > 0
+                    ? selectedUser.name
+                    : ""}
+                </span>
+                <p>{lastestMassage}</p>
               </section>
             </div>
             <div className="icons-container">
@@ -202,13 +241,15 @@ function Dashboard({ socket }) {
               <img src={dotsSvg} alt="otions" id="dots" />
             </div>
           </div>
-          <div className="chat-main" ref={messageRef}>
-            {!room ? (
-              <>{"no room loaded"}</>
-            ) : (
-              <Room room={room} messages={messages} messageRef={messageRef} />
-            )}
-          </div>
+          {!room ? (
+            <>{"no room loaded"}</>
+          ) : (
+            <Room
+              room={room}
+              messages={messages}
+              handleGetDate={getLatestMessageDate}
+            />
+          )}
           <div className="chat-toolbar">
             <div className="input-container">
               <form onSubmit={handleSubmit}>

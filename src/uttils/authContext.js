@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   );
   return (
     <AuthContext.Provider value={contextData}>
-      {/* {loading ? (
+      {loading ? (
         <div className="spinner-wrapper">
           <p className="loader-spinner">
             <p className="loader-spinner-inner"></p>
@@ -110,13 +110,13 @@ export const AuthProvider = ({ children }) => {
         </div>
       ) : (
         children
-      )} */}
-              <div className="spinner-wrapper">
+      )}
+              {/* <div className="spinner-wrapper">
           <p className="loader-spinner">
             <p className="loader-spinner-inner"></p>
             <p className="loader-spinner-inner2"></p>
           </p>
-        </div>
+        </div> */}
     </AuthContext.Provider>
   );
 };

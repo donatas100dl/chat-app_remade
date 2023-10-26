@@ -5,12 +5,23 @@ import {
   DATABASE_ID,
   COLECTION_ID_MESSAGES,
 } from "../appWriteConfig.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import Message from "../components/message.js";
-function Room({ room, messages }) {
-  
+
+function Room({ room, messages, handleGetDate }) {
+  const messageRef = useRef(null);
+  useEffect(() => {
+    if (messageRef.current) {
+      messageRef.current.scrollTop = messageRef.current.scrollHeight;
+    }
+    if(messages.length > 0) {
+      handleGetDate(messages[messages.length-1 ].date)
+    }
+
+  }, [messages]);
+
   return (
-    <div className="chat-main">
+    <div className="chat-main" ref={messageRef}>
       <>{`room id: ${room._id}`}</>
       {room && messages.length > 0
         ? messages.map((msg) => <Message message={msg} key={msg._id}/>)

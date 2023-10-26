@@ -8,12 +8,11 @@
   display: flex;
   justify-content: space-between;
   transition: all 0.1s linear;
+  gap: 1rem;
   position: relative;
-  /* box-shadow: -11px 14px 38px -40px rgba(0,0,0); */
   border-bottom: 1px solid rgba(173, 169, 169, 0.295);
 }
 .contact_person:hover {
-  /* background-color: var(--light-gray); */
   box-shadow: -11px 14px 38px 10px rgba(0, 0, 0, 0.1) inset;
 }
 .contact_person .logo-name {
@@ -60,12 +59,12 @@
 
 /* media quarys */
 @media (max-width: 1399px) {
-  .contact_person .date,
-  .contact_person span,
-  .contact_person h1 {
+  .collapsed-contact .contact_person .date,
+  .collapsed-contact .contact_person span,
+  .collapsed-contact .contact_person h1 {
     display: none;
   }
-  .contact_person {
+  .collapsed-contact .contact_person {
     border-bottom: none;
     border-top: 1px solid rgba(173, 169, 169, 0.295);
   }

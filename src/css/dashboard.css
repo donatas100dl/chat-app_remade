@@ -29,6 +29,8 @@
   gap: 0.6rem;
   margin: 0;
 }
+.expand-contact {
+}
 .contact .profile {
   display: flex;
   align-items: center;
@@ -214,23 +216,33 @@
 
 /* media quarys */
 @media (max-width: 1399px) {
-  .contact{
+  .collapsed-contact {
     width: fit-content;
   }
-  .contact .profile span, .contact .profile .options {
+  .collapsed-contact .profile span,
+  .collapsed-contact .profile .options {
     display: none;
   }
-  .contact .search-bar {
+  .collapsed-contact .search-bar {
     display: none;
+  }
+  .contact {
+    min-width: max-content;
   }
 }
-@media (max-width: 551px) {
-  .contact{
+@media (max-width: 591px) {
+  .collapsed-contact {
     display: none;
+  }
+  .contact {
+    min-width: 100%;
+  }
+  .dashboard-main {
+    overflow-x: hidden;
   }
 }
 @media (max-width: 799px) {
-  .chat .chat-toolbar{
+  .chat .chat-toolbar {
     padding: 0.5rem 5px;
   }
   .chat-toolbar .emoji {
@@ -238,9 +250,7 @@
   }
 }
 @media (max-width: 373px) {
-  .chat .chat-nav #search  {
+  .chat .chat-nav #search {
     display: none;
   }
-
 }
-
