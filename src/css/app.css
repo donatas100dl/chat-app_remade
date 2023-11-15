@@ -24,29 +24,62 @@ body [data-theme="mixed"] {
 }
 
 :root {
+  --time: 0.5s;
   --text: #030e1c;
+  --assets: black;
+  --assets-search: #0000005c;
   --background: #f0f6ff;
-  --light-blue: #d5e6fb;
-  --primary: #74c0e4c4;
+  --contacts: #d5e6fb;
+  --contacts-messages-count: #74c0e4c4;
   --blue: #00aeff;
   --secondary: #c2daf9;
   --red: red;
   --accent: #146bdb;
-  --blue: #2079eee3;
-  --light-gray: #d6d6d6;
+  --message: #2079eee3;
+  --gray-message: #d6d6d6;
   --body-background: #2079ee;
   --logo-primary: #146bdb;
   --logo-secondary: #1158b6;
-  --gray: gray;
+  --gray: #808080;
+  --placeholder: #7f7b7b;
+  --border: rgba(173, 169, 169, 0.295);
+  transition: background-color 2s ease-in-out;
+  --shadow-glow: 0px 0px 7px 2px rgb(0 159 255);
 }
 
-[data-theme="dark"] {
-  --body-background: #2079ee;
-  --blue: #2079eee3;
-  --light-gray: #d6d6d6;
-  --primary: #74c0e4c4;
-  --background: #f0f6ff;
-  --light-blue: #d5e6fb;
+[data-theme="dark-yell"] {
+  --message-input: #f5ff8159;
+  --border: rgba(173, 169, 169, 0.295);
+  --body-background: #2C2C2C;
+  --text: #ffffff;
+  --assets: rgb(255, 255, 255);
+  --assets-search: #ffffff;
+  --background: #2C2C2C;
+  --contacts: #232323;
+  --contacts-messages-count: #f5ff8159;
+  --message: #f5ff817c;
+  --gray-message: #f5ff8134;
+  --placeholder: #ffffff9c;
+  transition: background-color 2s ease-in-out;
+  --shadow-glow: #f5ff818a;
+
+}
+
+[data-theme="dark-blue"] {
+  --message-input: rgb(48 52 99 / 98%);
+  --border: rgba(173, 169, 169, 0.295);
+  --body-background: rgba(36, 39, 74, 0.95);
+  --text: #ffffff;
+  --assets: rgb(255, 255, 255);
+  --assets-search: #ffffff;
+  --background: rgba(36, 39, 74, 0.95);
+  --contacts: #1D2043;
+  --contacts-messages-count: #296AC0;
+  --message: #296AC0;
+  --gray-message: #71708A;
+  --placeholder: #ffffffcc;
+  transition: background-color 2s ease-in-out;
+  --shadow-glow: rgb(74 34 144 / 86%);
 }
 
 body,
@@ -81,6 +114,12 @@ h1 {
 input:focus {
   outline: none;
 }
+input{
+  color: var(--text);
+}
+input::placeholder {
+  color: var(--placeholder);
+}
 /* Hide scrollbar track and buttons (for Webkit based browsers) */
 ::-webkit-scrollbar {
   width: 0.5em; /* Adjust this width as needed */
@@ -111,4 +150,7 @@ input:focus {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+}
+.theme-change {
+  transition: background-color var(--time), color var(--time);
 }

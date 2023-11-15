@@ -1,7 +1,7 @@
 import "../css/navbar.css";
-import Logo from "./logo.js";
+import Logo from "./logo.jsx";
 import logOut from "../assets/logout.svg";
-import { useAuth } from "../uttils/authContext";
+import { useAuth } from "../uttils/authContext.js";
 function Navbar() {
   const {handleUserLogout} = useAuth();
   return (

@@ -52,9 +52,10 @@
 }
 .contact_person .date .new-messages {
   padding: 10px 15px;
-  background-color: var(--primary);
+  background-color: var(--contacts-messages-count);
   border-radius: 35%;
   box-shadow: -4px 1px 30px -10px rgba(0, 0, 0, 0.8);
+  color: var(--text);
 }
 
 /* media quarys */
@@ -66,6 +67,6 @@
   }
   .collapsed-contact .contact_person {
     border-bottom: none;
-    border-top: 1px solid rgba(173, 169, 169, 0.295);
+    border-top: 1px solid var(--border);
   }
 }

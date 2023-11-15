@@ -6,7 +6,7 @@ import {
   COLECTION_ID_MESSAGES,
 } from "../appWriteConfig.js";
 import { useEffect, useState, useRef} from "react";
-import Message from "../components/message.js";
+import Message from "../components/message.jsx";
 
 function Room({ room, messages, handleGetDate }) {
   const messageRef = useRef(null);

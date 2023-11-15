@@ -7,7 +7,7 @@ import {
   COLECTION_ID_MESSAGES,
 } from "../appWriteConfig.js";
 import { useEffect, useState } from "react";
-import { useAuth } from "../uttils/authContext";
+import { useAuth } from "../uttils/authContext.js";
 import { useNavigate } from "react-router-dom";
 function Login() {
 const [loginInfo, setLoginInfo] = useState({
@@ -67,7 +67,7 @@ const handleSubit = async (e) => {
                 <img src={require("../assets/instagram.png")}/>
                 </div>
             </div>
-            <p className="nav-register">Already a user? <a href="#">LOGIN</a></p>
+            <p className="nav-register">Already a user? <span id="navigate" onClick={() => navigate("/user/register")}>Register</span></p>
       </div>
     </div>
   );

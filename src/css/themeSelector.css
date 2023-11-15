@@ -1,0 +1,71 @@
+.theme-selector-container{
+    display: flex;
+    justify-content: center;
+    height: auto;
+    width: auto;
+    position: relative;
+    height: 35px;
+    width: 35px;
+    background-color: var(--contacts-messages-count);
+    padding: 0.8rem;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+
+.light, .moon, .drop {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 150%;
+    transition: transform 0.3s ease-in-out;
+}
+
+.light-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.light-wrapper #on {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+.light-wrapper:hover > #on {
+    opacity: 1;
+}
+
+.moon:hover > svg {
+    transform: rotate(340deg);
+}
+.moon svg {
+    transition: transform 0.3s ease-in-out;
+}
+.moon svg path,.moon svg circle{
+    stroke: white;
+    fill: white;
+}
+.drop svg {
+    
+}
+.drop svg path,.drop svg circle {
+    stroke: black;
+    fill: black;
+}
+
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.leave{
+    transform: translateX(225%);
+    right: 150%;
+}
+
+.enter{
+    transform: translateX(-100%);
+}

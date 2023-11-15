@@ -6,7 +6,7 @@
     width: fit-content;
     height: fit-content;
     word-wrap: normal;
-    background-color: var(--light-gray);
+    background-color: var(--gray-message);
     border-radius: 20px;
     box-sizing: border-box;
     padding: 0.5rem 1rem;
@@ -30,11 +30,12 @@
 }
 
 .your-message{
-background-color: var(--blue);
+background-color: var(--message);
 float: right !important;
-color:rgb(255, 255, 255);
 }
-
+.your-message span{
+  color:rgb(255, 255, 255) !important;
+  }
 /* media quarys */
 @media (max-width: 894px) {
     .message {

@@ -1,5 +1,17 @@
 import "../css/contact_person.css";
 function contact_person({ isNew, last_seen, user, handleSelect }) {
+
+var today = new Date();
+
+var newDate = new Date(today);
+newDate.setDate(today.getDate() - last_seen.split("")[0]);
+
+function formatDate(date) {
+  var options = {day: 'numeric', month: 'short'};
+   let dateWords = date.toLocaleDateString(undefined, options).split(" ")
+   return `${dateWords[1]} ${dateWords[0]}`
+}
+
   const handleClick = (e) => {
     e.preventDefault()
     handleSelect(user)
@@ -20,7 +32,7 @@ function contact_person({ isNew, last_seen, user, handleSelect }) {
         </div>
       </div>
       <div className="date">
-        <span>{last_seen}</span>
+        <span>{formatDate(newDate)}</span>
         <div className="has-new-message">
           {!isNew ? <div></div> : <div className="new-messages">9+</div>}
         </div>

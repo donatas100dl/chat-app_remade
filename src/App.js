@@ -1,8 +1,9 @@
 import "./css/app.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PrivateRoutes from "./uttils/pivateRoutes";
-import Dashboard from "./pages/dashboard.js";
+import Dashboard from "./pages/dashboard.jsx";
 import Login from "./pages/login";
+import Register from "./pages/register.jsx"; 
 import { AuthProvider } from "./uttils/authContext";
 import { RoomProvider } from "./uttils/roomContext";
 import { useEffect } from "react";
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/user/login" element={<Login />} />
             <Route path="/" element={<Dashboard socket={socket} />} />
+            <Route path="/user/register" element={<Register />} />
            </Routes>
         </RoomProvider>
       </AuthProvider>
