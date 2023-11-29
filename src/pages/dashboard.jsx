@@ -30,7 +30,7 @@ function Dashboard({ socket }) {
   const [lastestMassage, setLastestMassage] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [expandContactList, setExpandContactList] = useState(false);
-  const { user, url, loading, getAllUsers, users } = useAuth();
+  const { user, url, loading, getAllUsers, users, userRooms, getUserRooms } = useAuth();
   const { loadRoom, updateMessages } = useRoom();
   const navigate = useNavigate();
   const real_time = new Date();
@@ -73,7 +73,8 @@ function Dashboard({ socket }) {
         let data = possibleUsers.filter((selectedUser) =>
           selectedUser.name.toLowerCase().startsWith(userSearch.toLowerCase())
         );
-          setAllUsers(data);
+        console.log("all users", data);
+        setAllUsers(data);
       }
     }
     if (room) {
@@ -121,12 +122,17 @@ function Dashboard({ socket }) {
     }
   };
 
-  const loadMessageCallback = (msg) => {};
+  const loadMessageCallback = (msg) => {
+    console.log("loadMessageCallback: ", msg)
+  };
 
   const getSelectedUser = async (user_1) => {
+    await getUserRooms()
     setSelectedUser(user_1);
     console.log(user_1);
+    console.log(user);
     const loadedRoom = await loadRoom(user._id, user_1._id);
+    console.log("trying join room")
     socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
     setRoom(loadedRoom);
   };
@@ -282,17 +288,25 @@ function Dashboard({ socket }) {
             </div>
           </div>
           <div className="contact-people-list">
-            {!allUsers || allUsers.length === 0
-              ? <span id="error">No user called <p>{userSearch}</p> found</span>
-              : allUsers.map((user_1) => (
-                  <Contact_person
-                    isNew={true}
-                    last_seen={lastestMassage}
-                    user={user_1}
-                    key={user_1._id}
-                    handleSelect={getSelectedUser}
-                  />
-                ))}
+            {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
+              <span id="error">
+                No user found <p>{userSearch}</p>{" "}
+              </span>
+            ) : (
+              allUsers.map((user_1, index) => (
+                <Contact_person
+                  isNew={true}
+                  room={userRooms.find(
+                    (room) =>
+                      room.user_id_1 === user_1._id || room.user_id_2 === user_1._id
+                  )}
+                  last_seen={lastestMassage}
+                  user={user_1}
+                  key={user_1._id}
+                  handleSelect={getSelectedUser}
+                />
+              ))
+            )}
           </div>
         </div>
         <div className="chat">

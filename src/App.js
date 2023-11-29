@@ -1,6 +1,5 @@
 import "./css/app.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import PrivateRoutes from "./uttils/pivateRoutes";
 import Dashboard from "./pages/dashboard.jsx";
 import Login from "./pages/login";
 import Register from "./pages/register.jsx"; 

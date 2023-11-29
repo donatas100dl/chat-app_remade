@@ -1,15 +1,31 @@
 import "../css/contact_person.css";
-function contact_person({ isNew, last_seen, user, handleSelect }) {
+function contact_person({user, handleSelect, room}) {
+var userMessages,lastMessage
+if(room){
+   userMessages = room.messages.length > 0 ? room.messages.filter(message => message.user_id === user._id) : [];
+   lastMessage = userMessages[userMessages.length - 1] 
+}
 
 var today = new Date();
-
 var newDate = new Date(today);
-newDate.setDate(today.getDate() - last_seen.split("")[0]);
 
-function formatDate(date) {
-  var options = {day: 'numeric', month: 'short'};
-   let dateWords = date.toLocaleDateString(undefined, options).split(" ")
-   return `${dateWords[1]} ${dateWords[0]}`
+function getUnreadMessages() {
+  if(room){
+    if(userMessages.length > 0 ){
+      const unreadMessages = userMessages.filter( message => message.read === false)
+      return `+${unreadMessages.length}`
+    }
+  }
+  return null
+}
+
+function getTime() {
+  if(lastMessage){
+    var newDate = new Date(lastMessage.date)
+    var options = {day: 'numeric', month: 'short'};
+    let dateWords = newDate.toLocaleDateString(undefined, options).split(" ")
+    return `${dateWords[1]} ${dateWords[0]}`
+  }
 }
 
   const handleClick = (e) => {
@@ -32,9 +48,9 @@ function formatDate(date) {
         </div>
       </div>
       <div className="date">
-        <span>{formatDate(newDate)}</span>
+        <span>{getTime()}</span>
         <div className="has-new-message">
-          {!isNew ? <div></div> : <div className="new-messages">9+</div>}
+          {getUnreadMessages() === null ? <></> : <div className="new-messages">{getUnreadMessages()}</div>}
         </div>
       </div>
     </div>

@@ -13,25 +13,42 @@ export const RoomProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [room, setRoom] = useState(null);
-  const { user } = useAuth();
+  const { user, userRooms } = useAuth();
   useEffect(() => {
     setLoading(false);
   }, []);
 
   const loadRoom = async (user_id_1, user_id_2) => {
-    const res = await axios.post(
-      `${url}/chat/`,
-      {
-        user_id_1: user_id_1,
-        user_id_2: user_id_2,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-    );
-    return res.data.room;
+    if(user && userRooms){
+      console.log("user ids 1 and 2",user_id_1, user_id_2, userRooms ) 
+      var room = userRooms.find(
+        (room) =>
+          (room.user_id_1 === user_id_1 && room.user_id_2 === user_id_2) ||
+          (room.user_id_1 === user_id_2 && room.user_id_2 === user_id_1)
+      );
+
+        console.log("already exist", room)
+       if(!room){
+        // create new room
+        const res = await axios.post(
+          `${url}/chat/new`,
+          {
+            user_id_1: user_id_1,
+            user_id_2: user_id_2,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        console.log("new room", room)
+        room = res.data.room
+       }
+       console.log("room loaded: ",room);
+       return room
+    }
+   
   };
 
   const getRoomByID = async (roomId) => {
