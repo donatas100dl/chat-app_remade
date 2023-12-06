@@ -28,6 +28,7 @@ body [data-theme="mixed"] {
   --text: #030e1c;
   --assets: black;
   --assets-search: #0000005c;
+  --message-input: rgba(202, 200, 200, 0.226);
   --background: #f0f6ff;
   --contacts: #d5e6fb;
   --contacts-messages-count: #74c0e4c4;

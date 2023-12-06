@@ -4,6 +4,7 @@ import Navbar from "../components/navbar.jsx";
 import dotsSvg from "../assets/dots.svg";
 import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person.jsx";
+import Dropdown from "../components/dropdown.jsx";
 import Message from "../components/message.jsx";
 import smileSvg from "../assets/smile-face.svg";
 import Emoji_selector from "../components/emoji_selector.jsx";
@@ -132,7 +133,6 @@ function Dashboard({ socket }) {
     console.log(user_1);
     console.log(user);
     const loadedRoom = await loadRoom(user._id, user_1._id);
-    console.log("trying join room")
     socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
     setRoom(loadedRoom);
   };
@@ -222,28 +222,12 @@ function Dashboard({ socket }) {
             </div>
 
             <div className="options">
-              <div className="dots">
-                <svg
-                  width="800px"
-                  height="800px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14.5 4C14.5 5.38071 13.3807 6.5 12 6.5C10.6193 6.5 9.5 5.38071 9.5 4C9.5 2.61929 10.6193 1.5 12 1.5C13.3807 1.5 14.5 2.61929 14.5 4Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M14.5 12C14.5 13.3807 13.3807 14.5 12 14.5C10.6193 14.5 9.5 13.3807 9.5 12C9.5 10.6193 10.6193 9.5 12 9.5C13.3807 9.5 14.5 10.6193 14.5 12Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M12 22.5C13.3807 22.5 14.5 21.3807 14.5 20C14.5 18.6193 13.3807 17.5 12 17.5C10.6193 17.5 9.5 18.6193 9.5 20C9.5 21.3807 10.6193 22.5 12 22.5Z"
-                    fill="#000000"
-                  />
-                </svg>
-              </div>
+                <Dropdown pos="center">
+                  <li data-nav="user/settings">Setting</li>
+                  <li data-nav="user/settings">2Setting</li>
+                  <li data-nav="user/settings">1Setting</li>
+                  <li data-nav="user/settings">3Setting</li>
+                </Dropdown>
             </div>
           </div>
           <div className="search-bar">
@@ -362,26 +346,12 @@ function Dashboard({ socket }) {
                 </svg>
               </div>
               <div id="dots">
-                <svg
-                  width="800px"
-                  height="800px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14.5 4C14.5 5.38071 13.3807 6.5 12 6.5C10.6193 6.5 9.5 5.38071 9.5 4C9.5 2.61929 10.6193 1.5 12 1.5C13.3807 1.5 14.5 2.61929 14.5 4Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M14.5 12C14.5 13.3807 13.3807 14.5 12 14.5C10.6193 14.5 9.5 13.3807 9.5 12C9.5 10.6193 10.6193 9.5 12 9.5C13.3807 9.5 14.5 10.6193 14.5 12Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M12 22.5C13.3807 22.5 14.5 21.3807 14.5 20C14.5 18.6193 13.3807 17.5 12 17.5C10.6193 17.5 9.5 18.6193 9.5 20C9.5 21.3807 10.6193 22.5 12 22.5Z"
-                    fill="#000000"
-                  />
-                </svg>
+              <Dropdown pos="right">
+                  <li data-nav="user/settings">Not setting1</li>
+                  <li data-nav="user/settings">Not setting5</li>
+                  <li data-nav="user/settings">Not setting3</li>
+                  <li data-nav="user/settings">Not setting2 </li>
+                </Dropdown>
               </div>
             </div>
           </div>
