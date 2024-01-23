@@ -5,6 +5,7 @@ import dotsSvg from "../assets/dots.svg";
 import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person.jsx";
 import Dropdown from "../components/dropdown.jsx";
+import Dropdown from "../components/dropdown.jsx";
 import Message from "../components/message.jsx";
 import smileSvg from "../assets/smile-face.svg";
 import Emoji_selector from "../components/emoji_selector.jsx";
@@ -76,6 +77,8 @@ function Dashboard({ socket }) {
         );
         console.log("all users", data);
         setAllUsers(data);
+        console.log("all users", data);
+        setAllUsers(data);
       }
     }
     if (room) {
@@ -126,11 +129,16 @@ function Dashboard({ socket }) {
   const loadMessageCallback = (msg) => {
     console.log("loadMessageCallback: ", msg)
   };
+  const loadMessageCallback = (msg) => {
+    console.log("loadMessageCallback: ", msg)
+  };
 
   const getSelectedUser = async (user_1) => {
     await getUserRooms()
+    await getUserRooms()
     setSelectedUser(user_1);
     console.log(user_1);
+    console.log(user);
     console.log(user);
     const loadedRoom = await loadRoom(user._id, user_1._id);
     socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
@@ -272,6 +280,25 @@ function Dashboard({ socket }) {
             </div>
           </div>
           <div className="contact-people-list">
+            {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
+              <span id="error">
+                No user found <p>{userSearch}</p>{" "}
+              </span>
+            ) : (
+              allUsers.map((user_1, index) => (
+                <Contact_person
+                  isNew={true}
+                  room={userRooms.find(
+                    (room) =>
+                      room.user_id_1 === user_1._id || room.user_id_2 === user_1._id
+                  )}
+                  last_seen={lastestMassage}
+                  user={user_1}
+                  key={user_1._id}
+                  handleSelect={getSelectedUser}
+                />
+              ))
+            )}
             {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
               <span id="error">
                 No user found <p>{userSearch}</p>{" "}
