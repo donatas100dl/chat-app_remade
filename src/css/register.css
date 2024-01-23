@@ -1,0 +1,223 @@
+.register-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  background-color: darken(var(--body-background), 0%);
+}
+.register-main {
+  width: 20rem;
+  height: 35rem;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  box-shadow: 0px 0px 9px 2px var(--shadow-glow);
+  justify-self: center;
+  justify-content: space-between;
+  align-self: center;
+  border-radius: 15px;
+  gap: 1rem;
+}
+.register-main form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.register-main form span {
+  margin-left: 3px;
+  font-size: 1rem;
+}
+.register-email .invalid,
+.register-password .invalid {
+  float: left;
+  margin: 0;
+  margin-left: 3px;
+  font-size: 0.9rem;
+  color: red;
+}
+.register-main h1 {
+  text-align: center;
+  font-weight: 500;
+  font-size: x-large;
+}
+.register-email {
+  display: flex;
+  flex-direction: column;
+}
+.register-password {
+  display: flex;
+  flex-direction: column;
+}
+.register-main input[type="text"],
+.register-main input[type="password"] {
+  border: none;
+  background-color: transparent;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.register-main form button {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: var(--message);
+  border-radius: 12px;
+  border: none;
+  box-shadow: 5px 12px 20px -18px rgba(0, 0, 0);
+  color: #ffffff;
+  font-size: larger;
+  transition: all 0.1s ease-in-out;
+}
+.register-main form button:hover {
+  background-color: #2079eead;
+}
+.forgot-password {
+  align-self: flex-end;
+  color: gray;
+  text-decoration: none;
+}
+.forgot-password:hover {
+  color: rgba(128, 128, 128, 0.445);
+}
+
+.register-options {
+  width: calc(100% - 10px);
+  border-top: 1px solid rgba(204, 204, 204, 0.719);
+  padding: 1.3rem;
+  display: flex;
+  margin-top: 1rem;
+  justify-content: center;
+  gap: 1.5rem;
+  position: relative;
+  justify-self: center;
+  align-self: center;
+}
+.register-options::after {
+  content: "OR";
+  box-sizing: border-box;
+  width: auto;
+  position: absolute;
+  height: auto;
+  width: auto;
+  top: -11%;
+  z-index: 2;
+  border-radius: 5px;
+  color: var(--text);
+  background-color: var(--background);
+  padding: 0 4px;
+}
+.register-main .nav-register {
+  justify-self: center;
+  align-self: center;
+  margin: 0;
+}
+.nav-register #navigate {
+  cursor: pointer;
+  color: rgb(129 19 233);
+  text-decoration: underline;
+}
+
+.register-main section {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around;
+  color: var(--text);
+}
+
+.register-main section .step {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  color: var(--text);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid var(--text);
+  position: relative;
+  font-size: 1.1rem;
+  transition: all 0.3s linear;
+  opacity: 0.3;
+}
+.register-main section .step::after {
+  content: "";
+  width: 90%;
+  height: 1px;
+  background-color: var(--text);
+  position: absolute;
+  left: 115%;
+}
+.register-main section .step:last-child::after {
+  background-color: transparent;
+}
+
+.register-main section .current {
+  border-color: var(--message);
+  background-color: var(--message);
+  border-width: 2px;
+  opacity: 1;
+}
+
+.register-main section .next::after {
+  background-color: var(--message);
+  opacity: 1;
+}
+.register-profile {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+.register-profile img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.register-profile .text {
+  font-size: 1.2rem;
+  width: auto;
+  font-weight:bolder;
+  letter-spacing: 1px;
+  
+}
+.verify-email {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.verify-email .text {
+  margin-left: 3px;
+  font-size: 1.2rem;
+}
+.verify-email input {
+  width: 90%;
+}
+.verify-email section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  gap: 0;
+}
+.verify-email section p {
+  margin: 5px;
+  padding: 0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+.verify-email section p span {
+    padding: 0;
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgb(0, 186, 248);
+    text-decoration: underline;
+}
+.register-main footer {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}

@@ -4,6 +4,7 @@ import Navbar from "../components/navbar.jsx";
 import dotsSvg from "../assets/dots.svg";
 import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person.jsx";
+import Dropdown from "../components/dropdown.jsx";
 import Message from "../components/message.jsx";
 import smileSvg from "../assets/smile-face.svg";
 import Emoji_selector from "../components/emoji_selector.jsx";
@@ -30,7 +31,7 @@ function Dashboard({ socket }) {
   const [lastestMassage, setLastestMassage] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [expandContactList, setExpandContactList] = useState(false);
-  const { user, url, loading, getAllUsers, users } = useAuth();
+  const { user, url, loading, getAllUsers, users, userRooms, getUserRooms, handleUserLogout } = useAuth();
   const { loadRoom, updateMessages } = useRoom();
   const navigate = useNavigate();
   const real_time = new Date();
@@ -73,7 +74,8 @@ function Dashboard({ socket }) {
         let data = possibleUsers.filter((selectedUser) =>
           selectedUser.name.toLowerCase().startsWith(userSearch.toLowerCase())
         );
-          setAllUsers(data);
+        console.log("all users", data);
+        setAllUsers(data);
       }
     }
     if (room) {
@@ -121,11 +123,15 @@ function Dashboard({ socket }) {
     }
   };
 
-  const loadMessageCallback = (msg) => {};
+  const loadMessageCallback = (msg) => {
+    console.log("loadMessageCallback: ", msg)
+  };
 
   const getSelectedUser = async (user_1) => {
+    await getUserRooms()
     setSelectedUser(user_1);
     console.log(user_1);
+    console.log(user);
     const loadedRoom = await loadRoom(user._id, user_1._id);
     socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
     setRoom(loadedRoom);
@@ -216,28 +222,12 @@ function Dashboard({ socket }) {
             </div>
 
             <div className="options">
-              <div className="dots">
-                <svg
-                  width="800px"
-                  height="800px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14.5 4C14.5 5.38071 13.3807 6.5 12 6.5C10.6193 6.5 9.5 5.38071 9.5 4C9.5 2.61929 10.6193 1.5 12 1.5C13.3807 1.5 14.5 2.61929 14.5 4Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M14.5 12C14.5 13.3807 13.3807 14.5 12 14.5C10.6193 14.5 9.5 13.3807 9.5 12C9.5 10.6193 10.6193 9.5 12 9.5C13.3807 9.5 14.5 10.6193 14.5 12Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M12 22.5C13.3807 22.5 14.5 21.3807 14.5 20C14.5 18.6193 13.3807 17.5 12 17.5C10.6193 17.5 9.5 18.6193 9.5 20C9.5 21.3807 10.6193 22.5 12 22.5Z"
-                    fill="#000000"
-                  />
-                </svg>
-              </div>
+                <Dropdown pos="center">
+                  <li>Setting</li>
+                  <li>3Setting</li>
+                  <li>1Setting</li>
+                  <li>2Setting</li>
+                </Dropdown>
             </div>
           </div>
           <div className="search-bar">
@@ -282,17 +272,25 @@ function Dashboard({ socket }) {
             </div>
           </div>
           <div className="contact-people-list">
-            {!allUsers || allUsers.length === 0
-              ? <span id="error">No user called <p>{userSearch}</p> found</span>
-              : allUsers.map((user_1) => (
-                  <Contact_person
-                    isNew={true}
-                    last_seen={lastestMassage}
-                    user={user_1}
-                    key={user_1._id}
-                    handleSelect={getSelectedUser}
-                  />
-                ))}
+            {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
+              <span id="error">
+                No user found <p>{userSearch}</p>{" "}
+              </span>
+            ) : (
+              allUsers.map((user_1, index) => (
+                <Contact_person
+                  isNew={true}
+                  room={userRooms.find(
+                    (room) =>
+                      room.user_id_1 === user_1._id || room.user_id_2 === user_1._id
+                  )}
+                  last_seen={lastestMassage}
+                  user={user_1}
+                  key={user_1._id}
+                  handleSelect={getSelectedUser}
+                />
+              ))
+            )}
           </div>
         </div>
         <div className="chat">
@@ -348,26 +346,12 @@ function Dashboard({ socket }) {
                 </svg>
               </div>
               <div id="dots">
-                <svg
-                  width="800px"
-                  height="800px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14.5 4C14.5 5.38071 13.3807 6.5 12 6.5C10.6193 6.5 9.5 5.38071 9.5 4C9.5 2.61929 10.6193 1.5 12 1.5C13.3807 1.5 14.5 2.61929 14.5 4Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M14.5 12C14.5 13.3807 13.3807 14.5 12 14.5C10.6193 14.5 9.5 13.3807 9.5 12C9.5 10.6193 10.6193 9.5 12 9.5C13.3807 9.5 14.5 10.6193 14.5 12Z"
-                    fill="#000000"
-                  />
-                  <path
-                    d="M12 22.5C13.3807 22.5 14.5 21.3807 14.5 20C14.5 18.6193 13.3807 17.5 12 17.5C10.6193 17.5 9.5 18.6193 9.5 20C9.5 21.3807 10.6193 22.5 12 22.5Z"
-                    fill="#000000"
-                  />
-                </svg>
+              <Dropdown pos="right">
+                  <li>Not setting1</li>
+                  <li>Not setting5</li>
+                  <li>Not setting3</li>
+                  <li onClick={async (e) => await handleUserLogout(e)}>Logout</li>
+                </Dropdown>
               </div>
             </div>
           </div>

@@ -1,72 +1,41 @@
-.spinner-wrapper{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: rotate 1.5s linear infinite;
-}
-
-.loader-spinner {
-  position: relative;
-  width: 300px;
-  height: 300px;
+.lds-ring {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
-  
+  align-items: center;
+  align-self: center;
+  justify-self: center;
+  position: relative;
+  place-self: center;
 }
-.loader-spinner-inner2{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    border: 60px solid rgb(255, 255, 255);
-    border-radius: 50%;
-    z-index: 1;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 404px;
+  height: 404px;
+  margin: 8px;
+  border: 30px solid var(--message);
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: var(--message) transparent transparent transparent;
 }
-.loader-spinner .loader-spinner-inner{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 60px solid rgba(50, 4, 252, 0.466);
-    border-radius: 50%;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
 }
-.loader-spinner::after{
-    content: "";
-    position: absolute;
-    width: 20%;
-    height: 200%;
-    opacity: 1;
-    background-color: var(--body-background);
-    top: 45%;
-    left: 50%;
-    z-index: 200;
-    transform: translate(-50%, -50%);
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
 }
-.loader-spinner-inner2::after{
-    content: "";
-    position: absolute;
-    width: 90%;
-    height: 150%;
-    opacity: 1;
-    z-index: -1;
-    background-color: var(--body-background);
-    top: 45%;
-    left: 10%;
-    transform: translate(-50%, -50%); 
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
 }
-
-@keyframes rotate {
+@keyframes lds-ring {
   0% {
     transform: rotate(0deg);
   }
-  100%{
+  100% {
     transform: rotate(360deg);
   }
 }

@@ -14,11 +14,25 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("dark-yell");
   const [users, setUsers] = useState([]);
+  const [userRooms, setUsersRooms] = useState([]);
   useEffect(() => {
     getUserOnLoad();
+    if(!Cookies.get("theme")){
+      Cookies.set("theme","black")
+    }
+    else{
+      setTheme(Cookies.get("theme"))
+    }
+
+
   }, []);
+
+  useEffect(() => {
+    document.body.setAttribute("data-theme", theme);
+    console.log("theme", theme);
+  },[theme])
 
   const getUserOnLoad = async () => {
     try {
@@ -36,6 +50,7 @@ export const AuthProvider = ({ children }) => {
         !userData ? navigate("/user/login") : setUser(userData);
       }
       setLoading(false);
+      getUserRooms();
       navigate("/");
     } catch (error) {
       //console.error(error);
@@ -43,16 +58,27 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const getUserRooms = async () => {
+    const token = await getToken();
+    const res = await axios.get(`${url}/user/`, {
+      headers: { Authorization: "Bearer " + token },
+    });
+    if (res) {
+      setUsersRooms(res.data.rooms);
+      console.log("gotten all rooms ", res.data.rooms);
+    }
+  };
+
   const getToken = async () => {
     return await Cookies.get("userToken");
   };
   const handleGetTheme = async () => {
     return await Cookies.get("userTheme");
-  }
+  };
   const handleSetTheme = async (theme) => {
-    Cookies.set("userTheme",theme);
-    handleGetTheme()
-  }
+    Cookies.set("userTheme", theme);
+    handleGetTheme();
+  };
 
   const handleLogin = async (e, loginInfo) => {
     e.preventDefault();
@@ -81,6 +107,7 @@ export const AuthProvider = ({ children }) => {
   };
   const handleUserLogout = async (e) => {
     e.preventDefault();
+    console.log("logged out")
     setUser(null);
     Cookies.remove("userToken");
     navigate("/user/login");
@@ -90,6 +117,7 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.get(`${url}/user/all`).then((res) => {
       if (res.data.users.length !== 0) {
         setUsers(res.data.users);
+        console.log(res.data.users);
       }
     });
   };
@@ -100,31 +128,43 @@ export const AuthProvider = ({ children }) => {
       users,
       url,
       loading,
+      userRooms,
       handleLogin,
       handleUserLogout,
       getToken,
       getAllUsers,
+      getUserRooms,
     }),
-    [user, users, url, handleLogin, handleUserLogout, getToken, getAllUsers]
+    [
+      user,
+      users,
+      url,
+      userRooms,
+      handleLogin,
+      handleUserLogout,
+      getToken,
+      getAllUsers,
+      getUserRooms,
+    ]
   );
   return (
     <AuthContext.Provider value={contextData}>
       {loading ? (
-        <div className="spinner-wrapper">
-          <p className="loader-spinner">
-            <p className="loader-spinner-inner"></p>
-            <p className="loader-spinner-inner2"></p>
-          </p>
-        </div>
+      <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
       ) : (
         children
       )}
-              {/* <div className="spinner-wrapper">
-          <p className="loader-spinner">
-            <p className="loader-spinner-inner"></p>
-            <p className="loader-spinner-inner2"></p>
-          </p>
-        </div> */}
+      {/* <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div> */}
     </AuthContext.Provider>
   );
 };

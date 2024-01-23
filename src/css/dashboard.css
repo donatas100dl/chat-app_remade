@@ -52,12 +52,12 @@
   background-color: white;
 }
 
-.contact .profile .options .dots svg {
+ .dots svg {
   width: 30px;
   height: 30px;
   aspect-ratio: 1;
 }
-.contact .profile .options .dots path {
+ .dots path {
   fill: var(--assets);
 }
 

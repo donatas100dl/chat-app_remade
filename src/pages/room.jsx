@@ -9,6 +9,7 @@ import { useEffect, useState, useRef} from "react";
 import Message from "../components/message.jsx";
 
 function Room({ room, messages, handleGetDate }) {
+  console.log("current room right now is : " + room._id)
   const messageRef = useRef(null);
   useEffect(() => {
     if (messageRef.current) {

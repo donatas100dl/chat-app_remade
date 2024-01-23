@@ -28,6 +28,7 @@ body [data-theme="mixed"] {
   --text: #030e1c;
   --assets: black;
   --assets-search: #0000005c;
+  --message-input: rgba(202, 200, 200, 0.226);
   --background: #f0f6ff;
   --contacts: #d5e6fb;
   --contacts-messages-count: #74c0e4c4;
@@ -43,7 +44,7 @@ body [data-theme="mixed"] {
   --gray: #808080;
   --placeholder: #7f7b7b;
   --border: rgba(173, 169, 169, 0.295);
-  transition: background-color 2s ease-in-out;
+  /* transition: background-color 2s ease-in-out; */
   --shadow-glow: 0px 0px 7px 2px rgb(0 159 255);
 }
 
@@ -60,7 +61,7 @@ body [data-theme="mixed"] {
   --message: #f5ff817c;
   --gray-message: #f5ff8134;
   --placeholder: #ffffff9c;
-  transition: background-color 2s ease-in-out;
+  /* transition: background-color 2s ease-in-out; */
   --shadow-glow: #f5ff818a;
 
 }
@@ -78,7 +79,7 @@ body [data-theme="mixed"] {
   --message: #296AC0;
   --gray-message: #71708A;
   --placeholder: #ffffffcc;
-  transition: background-color 2s ease-in-out;
+  /* transition: background-color 0.1s ease-in-out; */
   --shadow-glow: rgb(74 34 144 / 86%);
 }
 
