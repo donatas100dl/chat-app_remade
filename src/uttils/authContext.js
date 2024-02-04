@@ -41,11 +41,13 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: "Bearer " + token },
       });
       if (res) {
+        console.log(res)
         const userData = {
           email: res.data.email,
           name: res.data.name,
           _id: res.data._id,
           token: token,
+          avatarUrl: res.data.avatarUrl,
         };
         !userData ? navigate("/user/login") : setUser(userData);
       }
@@ -97,6 +99,7 @@ export const AuthProvider = ({ children }) => {
         name: apiRes.data.name,
         _id: apiRes.data._id,
         token: apiRes.data.token,
+        avatarUrl: apiRes.data.avatarUrl,
       };
       setUser(userData);
       navigate("/");
@@ -105,6 +108,35 @@ export const AuthProvider = ({ children }) => {
       return { err: true };
     }
   };
+  const handleRegister = async (registerInfo) => {
+    try {
+      const res = await axios.post(`${url}/user/`, {
+        name: registerInfo.username,
+        email: registerInfo.email,
+        password: registerInfo.password,
+        avatar: registerInfo.avatar,
+        
+      });
+
+      if (res.data.token !== "") {
+        Cookies.set("userToken", res.data.token);
+      }
+
+      const userData = {
+        email: res.data.email,
+        name: res.data.name,
+        _id: res.data._id,
+        token: res.data.token,
+        avatarUrl: res.data.avatarUrl,
+      };
+      setUser(userData);
+      navigate("/");
+    }
+    catch (err) {
+      console.log("error: ", err);
+      return { err: true };
+    }
+}
   const handleUserLogout = async (e) => {
     e.preventDefault();
     console.log("logged out")
@@ -114,13 +146,39 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getAllUsers = async () => {
-    const res = await axios.get(`${url}/user/all`).then((res) => {
+    await axios.get(`${url}/user/all`).then((res) => {
       if (res.data.users.length !== 0) {
         setUsers(res.data.users);
         console.log(res.data.users);
       }
     });
   };
+
+  const isEmailTaken = async (email) => {
+    try {
+      const res = await axios.post(`${url}/user/exist/email`, {
+        email:email
+      });
+      if (res) {
+        return res.data.isTaken;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const isUsernameTaken = async (username) => {
+    try {
+      const res = await axios.post(`${url}/user/exist/username`, {
+        name:username
+      });
+      if (res) {
+        return res.data.isTaken;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const contextData = useMemo(
     () => ({
@@ -130,22 +188,14 @@ export const AuthProvider = ({ children }) => {
       loading,
       userRooms,
       handleLogin,
+      handleRegister,
       handleUserLogout,
       getToken,
       getAllUsers,
       getUserRooms,
-    }),
-    [
-      user,
-      users,
-      url,
-      userRooms,
-      handleLogin,
-      handleUserLogout,
-      getToken,
-      getAllUsers,
-      getUserRooms,
-    ]
+      isEmailTaken,
+      isUsernameTaken,
+    })
   );
   return (
     <AuthContext.Provider value={contextData}>

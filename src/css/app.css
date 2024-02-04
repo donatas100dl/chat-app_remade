@@ -110,7 +110,7 @@ h1 {
   color: var(--text);
 }
 .d-none {
-  display: none;
+  display: none !important;
 }
 input:focus {
   outline: none;

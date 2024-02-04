@@ -5,7 +5,6 @@ import dotsSvg from "../assets/dots.svg";
 import searchSvg from "../assets/search.svg";
 import Contact_person from "../components/contact_person.jsx";
 import Dropdown from "../components/dropdown.jsx";
-import Dropdown from "../components/dropdown.jsx";
 import Message from "../components/message.jsx";
 import smileSvg from "../assets/smile-face.svg";
 import Emoji_selector from "../components/emoji_selector.jsx";
@@ -51,6 +50,7 @@ function Dashboard({ socket }) {
     if (!user) {
       navigate("/user/login");
     }
+    console.log(user)
     getAllUsers();
   }, []);
 
@@ -126,9 +126,6 @@ function Dashboard({ socket }) {
     }
   };
 
-  const loadMessageCallback = (msg) => {
-    console.log("loadMessageCallback: ", msg)
-  };
   const loadMessageCallback = (msg) => {
     console.log("loadMessageCallback: ", msg)
   };
@@ -219,14 +216,13 @@ function Dashboard({ socket }) {
           <div className="profile">
             <div className="profile-info">
               <span>{user && user.name.length > 0 ? user.name : ""}</span>
-              <div className="profile-icon">
                 <img
-                  width="50"
-                  height="50"
-                  src="https://img.icons8.com/ios/50/user--v1.png"
+                  width="70"
+                  height="70"
+                  style={{borderRadius: "50%"}}
+                  src={user ? require(`../assets/${user.avatarUrl}`) : require("../assets/profile_placeholder_2.jpg")}
                   alt="user--v1"
                 />
-              </div>
             </div>
 
             <div className="options">
@@ -280,25 +276,6 @@ function Dashboard({ socket }) {
             </div>
           </div>
           <div className="contact-people-list">
-            {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
-              <span id="error">
-                No user found <p>{userSearch}</p>{" "}
-              </span>
-            ) : (
-              allUsers.map((user_1, index) => (
-                <Contact_person
-                  isNew={true}
-                  room={userRooms.find(
-                    (room) =>
-                      room.user_id_1 === user_1._id || room.user_id_2 === user_1._id
-                  )}
-                  last_seen={lastestMassage}
-                  user={user_1}
-                  key={user_1._id}
-                  handleSelect={getSelectedUser}
-                />
-              ))
-            )}
             {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
               <span id="error">
                 No user found <p>{userSearch}</p>{" "}

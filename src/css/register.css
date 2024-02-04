@@ -168,6 +168,7 @@
   align-items: center;
   width: 100%;
   gap: 1rem;
+  cursor: pointer;
 }
 .register-profile img {
   width: 100px;
@@ -177,9 +178,9 @@
 .register-profile .text {
   font-size: 1.2rem;
   width: auto;
-  font-weight:bolder;
+  font-weight: bolder;
   letter-spacing: 1px;
-  
+  cursor: pointer;
 }
 .verify-email {
   width: 100%;
@@ -210,14 +211,24 @@
   opacity: 0.8;
 }
 .verify-email section p span {
-    padding: 0;
-    margin: 0;
-    font-size: 0.8rem;
-    color: rgb(0, 186, 248);
-    text-decoration: underline;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgb(0, 186, 248);
+  text-decoration: underline;
 }
 .register-main footer {
-    display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+}
+.input span {
+  color: red;
+  font-size: .9rem !important;
+  display: flex;
 }
