@@ -31,7 +31,16 @@ function Dashboard({ socket }) {
   const [lastestMassage, setLastestMassage] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [expandContactList, setExpandContactList] = useState(false);
-  const { user, url, loading, getAllUsers, users, userRooms, getUserRooms, handleUserLogout } = useAuth();
+  const {
+    user,
+    url,
+    loading,
+    getAllUsers,
+    users,
+    userRooms,
+    getUserRooms,
+    handleUserLogout,
+  } = useAuth();
   const { loadRoom, updateMessages } = useRoom();
   const navigate = useNavigate();
   const real_time = new Date();
@@ -50,7 +59,7 @@ function Dashboard({ socket }) {
     if (!user) {
       navigate("/user/login");
     }
-    console.log(user)
+    console.log(user);
     getAllUsers();
   }, []);
 
@@ -127,12 +136,12 @@ function Dashboard({ socket }) {
   };
 
   const loadMessageCallback = (msg) => {
-    console.log("loadMessageCallback: ", msg)
+    console.log("loadMessageCallback: ", msg);
   };
 
   const getSelectedUser = async (user_1) => {
-    await getUserRooms()
-    await getUserRooms()
+    await getUserRooms();
+    await getUserRooms();
     setSelectedUser(user_1);
     console.log(user_1);
     console.log(user);
@@ -216,22 +225,32 @@ function Dashboard({ socket }) {
           <div className="profile">
             <div className="profile-info">
               <span>{user && user.name.length > 0 ? user.name : ""}</span>
-                <img
-                  width="70"
-                  height="70"
-                  style={{borderRadius: "50%"}}
-                  src={user ? require(`../assets/${user.avatarUrl}`) : require("../assets/profile_placeholder_2.jpg")}
-                  alt="user--v1"
-                />
+              <img
+                width="70"
+                height="70"
+                style={{ borderRadius: "50%" }}
+                src={
+                  (user && typeof user.avatarUrl === "string"
+                    ? (() => {
+                        try {
+                          return require(`../assets/${user.avatarUrl}`);
+                        } catch (error) {
+                          return null;
+                        }
+                      })()
+                    : null) || require("../assets/profile_placeholder_2.jpg")
+                }
+                alt="user--v1"
+              />
             </div>
 
             <div className="options">
-                <Dropdown pos="center">
-                  <li>Setting</li>
-                  <li>3Setting</li>
-                  <li>1Setting</li>
-                  <li>2Setting</li>
-                </Dropdown>
+              <Dropdown pos="center">
+                <li>Setting</li>
+                <li>3Setting</li>
+                <li>1Setting</li>
+                <li>2Setting</li>
+              </Dropdown>
             </div>
           </div>
           <div className="search-bar">
@@ -276,7 +295,7 @@ function Dashboard({ socket }) {
             </div>
           </div>
           <div className="contact-people-list">
-            {!allUsers || allUsers.length === 0  && userRooms.length === 0 ? (
+            {!allUsers || (allUsers.length === 0 && userRooms.length === 0) ? (
               <span id="error">
                 No user found <p>{userSearch}</p>{" "}
               </span>
@@ -286,7 +305,8 @@ function Dashboard({ socket }) {
                   isNew={true}
                   room={userRooms.find(
                     (room) =>
-                      room.user_id_1 === user_1._id || room.user_id_2 === user_1._id
+                      room.user_id_1 === user_1._id ||
+                      room.user_id_2 === user_1._id
                   )}
                   last_seen={lastestMassage}
                   user={user_1}
@@ -350,11 +370,13 @@ function Dashboard({ socket }) {
                 </svg>
               </div>
               <div id="dots">
-              <Dropdown pos="right">
+                <Dropdown pos="right">
                   <li>Not setting1</li>
                   <li>Not setting5</li>
                   <li>Not setting3</li>
-                  <li onClick={async (e) => await handleUserLogout(e)}>Logout</li>
+                  <li onClick={async (e) => await handleUserLogout(e)}>
+                    Logout
+                  </li>
                 </Dropdown>
               </div>
             </div>

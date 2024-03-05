@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false);
       getUserRooms();
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       //console.error(error);
     }
@@ -90,19 +90,23 @@ export const AuthProvider = ({ children }) => {
         password: loginInfo.password,
       });
 
-      if (apiRes.data.token !== "") {
-        Cookies.set("userToken", apiRes.data.token);
+      if(apiRes.data.message.includes("notverified")) {
+        console.log("user is not authenticated")
+        navigate("/user/verify")
       }
 
-      const userData = {
-        email: apiRes.data.email,
-        name: apiRes.data.name,
-        _id: apiRes.data._id,
-        token: apiRes.data.token,
-        avatarUrl: apiRes.data.avatarUrl,
-      };
-      setUser(userData);
-      navigate("/");
+      if (apiRes.data.token !== "" && apiRes.data.token) {
+        Cookies.set("userToken", apiRes.data.token);
+        const userData = {
+          email: apiRes.data.email,
+          name: apiRes.data.name,
+          _id: apiRes.data._id,
+          token: apiRes.data.token,
+          avatarUrl: apiRes.data.avatarUrl,
+        };
+        setUser(userData);
+        navigate("/dashboard");
+      }
     } catch (err) {
       console.log("error: ", err);
       return { err: true };
@@ -117,20 +121,7 @@ export const AuthProvider = ({ children }) => {
         avatar: registerInfo.avatar,
         
       });
-
-      if (res.data.token !== "") {
-        Cookies.set("userToken", res.data.token);
-      }
-
-      const userData = {
-        email: res.data.email,
-        name: res.data.name,
-        _id: res.data._id,
-        token: res.data.token,
-        avatarUrl: res.data.avatarUrl,
-      };
-      setUser(userData);
-      navigate("/");
+      navigate("/user/login");
     }
     catch (err) {
       console.log("error: ", err);
@@ -180,6 +171,17 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const handleEmailVerification = async (email) => {
+    try {
+      const res = await axios.post(`${url}/user/verify/email`, {
+        email: email
+      });
+      navigate("/")
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const contextData = useMemo(
     () => ({
       user,
@@ -195,6 +197,7 @@ export const AuthProvider = ({ children }) => {
       getUserRooms,
       isEmailTaken,
       isUsernameTaken,
+      handleEmailVerification,
     })
   );
   return (
