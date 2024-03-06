@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/register.css";
 import AvatarSelector from "../components/avatar_selcet";
 import { useAuth } from "../uttils/authContext";
+import EmailValidator  from "email-validator"
 export default function Register() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -32,6 +33,7 @@ export default function Register() {
     console.log("avatar ", avatarPath)
   }, [isSuccess, avatarPath, user]);
 
+
   const nextStep = async (e) => {
     e.preventDefault();
     setSuccess((prevSuccess) => {
@@ -48,7 +50,7 @@ export default function Register() {
     });
     switch (step) {
       case 1:
-        if (user.email === "" || !user.email.includes("@") || !user.email.split("@")[1].includes(".")) {
+        if (!EmailValidator.validate(user.email)) {
           setSuccess((prevSuccess) => ({ ...prevSuccess, emailFormat: false }));
           return;
         }
@@ -61,7 +63,7 @@ export default function Register() {
           return;
         }
         if (
-          user.confirmPassword !== user.password &&
+          user.confirmPassword !== user.password ||
           user.confirmPassword !== ""
         ) {
           setSuccess((prevSuccess) => ({
@@ -160,7 +162,7 @@ export default function Register() {
                   id="error"
                   className={isSuccess.confirmPassword ? "d-none" : ""}
                 >
-                  Emails do not match
+                  Passwords do not match
                 </span>
               </div>
             </div>

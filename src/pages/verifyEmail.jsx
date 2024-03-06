@@ -2,19 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/verifyEmail.css";
 import { useAuth } from "../uttils/authContext";
+import EmailValidator  from "email-validator"
 export default function VerifyEmail() {
   const navigate = useNavigate();
   const { handleEmailVerification } = useAuth();
   const [email, setEmail] = useState("");
 
-const isEmailCorrect = () => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-  
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isEmailCorrect(email)) {
+    if (!EmailValidator.validate(email)) {
       alert("Invalid email");
       return;
     } else {
