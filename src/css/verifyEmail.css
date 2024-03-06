@@ -112,7 +112,7 @@
     font-size: .9rem !important;
     display: flex;
   }
-  .verifyEmail-main input[type="text"],
+  .verifyEmail-main input[type="email"],
 .verifyEmail-main input[type="password"] {
   border: none;
   background-color: transparent;

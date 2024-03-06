@@ -50,7 +50,7 @@
   display: flex;
   flex-direction: column;
 }
-.register-main input[type="text"],
+.register-main input[type="email"],
 .register-main input[type="password"] {
   border: none;
   background-color: transparent;

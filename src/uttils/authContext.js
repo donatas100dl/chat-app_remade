@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     getUserOnLoad();
     if(!Cookies.get("theme")){
-      Cookies.set("theme","black")
+      Cookies.set("theme","dark-blue")
     }
     else{
       setTheme(Cookies.get("theme"))

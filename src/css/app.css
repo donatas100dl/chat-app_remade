@@ -23,7 +23,7 @@ body [data-theme="mixed"] {
   --color-surface-mixed-600: #9ba0c3;
 }
 
-:root {
+/* :root {
   --time: 0.5s;
   --text: #030e1c;
   --assets: black;
@@ -44,9 +44,32 @@ body [data-theme="mixed"] {
   --gray: #808080;
   --placeholder: #7f7b7b;
   --border: rgba(173, 169, 169, 0.295);
+}  */
+
+:root {
+  --time: 0.5s;
+  --text: #ffffff;
+  --assets: rgb(255, 255, 255);
+  --assets-search: #ffffff;
+  --message-input: rgb(48 52 99 / 98%);
+  --background: rgba(36, 39, 74, 0.95);
+  --contacts: #1D2043;
+  --contacts-messages-count: #74c0e4c4;
+  --blue: #00aeff;
+  --secondary: #c2daf9;
+  --red: red;
+  --accent: #146bdb;
+  --message: #296AC0;
+  --gray-message: #71708A;
+  --body-background: rgba(36, 39, 74, 0.95);
+  --logo-primary: #146bdb;
+  --logo-secondary: #1158b6;
+  --gray: #808080;
+  --placeholder: #ffffffcc;
+  --border: rgba(173, 169, 169, 0.295);
   /* transition: background-color 2s ease-in-out; */
-  --shadow-glow: 0px 0px 7px 2px rgb(0 159 255);
-}
+  --shadow-glow: rgb(74 34 144 / 86%);
+} 
 
 [data-theme="dark-yell"] {
   --message-input: #f5ff8159;
