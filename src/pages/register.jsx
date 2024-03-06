@@ -120,7 +120,7 @@ export default function Register() {
               <span>Email</span>
               <div className="input">
                 <input
-                  type="text"
+                  type="email"
                   placeholder="enter your email"
                   name="email"
                   onChange={handleChange}
@@ -212,7 +212,7 @@ export default function Register() {
               <section>
                 <div className="input">
                   <input
-                    type="text"
+                    type="email"
                     placeholder="confirm your email"
                     name="verifyEmail"
                     onChange={handleChange}

@@ -6,7 +6,8 @@ import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 import "../css/loader.css";
 
-const url = "http://localhost:4000";
+// const url = "http://localhost:4000";
+const url = "https://chat-app-backend-shool-project.glitch.me";
 
 const AuthContext = createContext();
 

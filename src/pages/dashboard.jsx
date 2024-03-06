@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import "../css/dashboard.css";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/navbar.jsx";

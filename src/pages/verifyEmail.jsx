@@ -34,7 +34,7 @@ const isEmailCorrect = () => {
               <section>
                 <div className="input">
                   <input
-                    type="text"
+                    type="email"
                     placeholder="enter email"
                     name="verifyEmail"
                     onChange={(e) => setEmail(e.target.value)}
