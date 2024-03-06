@@ -64,7 +64,7 @@ export default function Register() {
         }
         if (
           user.confirmPassword !== user.password ||
-          user.confirmPassword !== ""
+          user.confirmPassword === ""
         ) {
           setSuccess((prevSuccess) => ({
             ...prevSuccess,
@@ -72,6 +72,8 @@ export default function Register() {
           }));
           return;
         }
+
+        console.log(user.confirmPassword !== user.password)
         setStep(step + 1);
         return;
       case 2:
