@@ -71,6 +71,23 @@ body [data-theme="mixed"] {
   --shadow-glow: rgb(74 34 144 / 86%);
 } 
 
+[data-theme="light"] {
+  --message-input: rgba(202, 200, 200, 0.226);
+  --border: rgba(173, 169, 169, 0.295);
+  --body-background: #2079ee;
+  --text: #030e1c;
+  --assets: black;
+  --assets-search: #0000005c;
+  --background: #f0f6ff;
+  --contacts: #d5e6fb;
+  --contacts-messages-count: #74c0e4c4;
+  --message: #2079eee3;
+  --gray-message: #d6d6d6;
+  --placeholder: #7f7b7b;
+  /* transition: background-color 0.1s ease-in-out; */
+  --shadow-glow: rgb(74 34 144 / 86%);
+}
+
 [data-theme="dark-yell"] {
   --message-input: #f5ff8159;
   --border: rgba(173, 169, 169, 0.295);

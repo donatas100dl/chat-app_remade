@@ -41,10 +41,12 @@ function Dashboard({ socket }) {
     userRooms,
     getUserRooms,
     handleUserLogout,
+    handleSetUserRooms,
   } = useAuth();
-  const { loadRoom, updateMessages } = useRoom();
+  const { loadRoom, updateMessages, messageRead,  } = useRoom();
   const navigate = useNavigate();
   const real_time = new Date();
+  const isFirstLoad = useRef(true);
   useEffect(() => {
     if (!loading) {
       socket.on("gottenMessage", (data) => {
@@ -62,6 +64,7 @@ function Dashboard({ socket }) {
     }
     console.log(user);
     getAllUsers();
+    console.log(allUsers);
   }, []);
 
   useEffect(() => {
@@ -87,14 +90,74 @@ function Dashboard({ socket }) {
         );
         console.log("all users", data);
         setAllUsers(data);
-        console.log("all users", data);
-        setAllUsers(data);
       }
     }
+
     if (room) {
+      console.log("checking for unread messages");
       setMessages(room.messages);
+      console.log(room);
+      if (
+        room.messages.some(
+          (message) => message.read === false && message.user_id !== user.id
+        )
+      ) {
+        console.log("2");
+        messageRead(room._id);
+        const selectedRoomIndex = userRooms.findIndex(
+          (selectedRoom) => selectedRoom._id === room._id
+        );
+        console.log(room.id)
+        console.log("selectedRoomIndex ", selectedRoomIndex)
+        if (selectedRoomIndex !== -1) {
+          // Check if the selected room is found
+          console.log("3");
+          const updatedMessages = userRooms[selectedRoomIndex].messages.map(
+            (message) => {
+              if (message.read === false) {
+                return { ...message, read: true };
+              }
+              return message;
+            }
+          );
+          console.log("4");
+          const updatedUserRooms = [...userRooms]; // Create a copy of userRooms
+          updatedUserRooms[selectedRoomIndex] = {
+            ...userRooms[selectedRoomIndex],
+            messages: updatedMessages,
+          };
+          console.log("final",   updatedUserRooms);
+          handleSetUserRooms(updatedUserRooms);
+        }
+      }
     }
   }, [users, room, userSearch]);
+
+  useEffect(() => {
+    if (
+      allUsers.length > 0 &&
+      userRooms.length > 0 &&
+      user &&
+      isFirstLoad.current === true
+    ) {
+      isFirstLoad.current = false;
+      const randomNum = Math.floor(Math.random() * allUsers.length);
+      const randomUser = allUsers[randomNum];
+      setSelectedUser(randomUser);
+      console.log("randomuser ", randomUser);
+      console.log(
+        `random number: ${randomNum} allsuerLenght: ${allUsers.length}`
+      );
+      loadRoom(user._id, randomUser._id).then((loadedRoom) => {
+        if (loadedRoom) {
+          console.log("joing room");
+          socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
+          console.log("setting room");
+          setRoom(loadedRoom);
+        }
+      });
+    }
+  }, [allUsers, userRooms]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -142,10 +205,7 @@ function Dashboard({ socket }) {
 
   const getSelectedUser = async (user_1) => {
     await getUserRooms();
-    await getUserRooms();
     setSelectedUser(user_1);
-    console.log(user_1);
-    console.log(user);
     console.log(user);
     const loadedRoom = await loadRoom(user._id, user_1._id);
     socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
@@ -301,7 +361,7 @@ function Dashboard({ socket }) {
                 No user found <p>{userSearch}</p>{" "}
               </span>
             ) : (
-              allUsers.map((user_1, index) => (
+              allUsers.map((user_1) => (
                 <Contact_person
                   isNew={true}
                   room={userRooms.find(
@@ -323,7 +383,17 @@ function Dashboard({ socket }) {
             <div className="profile">
               <div className="profile-img">
                 <img
-                  src={require("../assets/profile_placeholder_2.jpg")}
+                  src={
+                    (selectedUser && typeof selectedUser.avatarUrl === "string"
+                      ? (() => {
+                          try {
+                            return require(`../assets/${selectedUser.avatarUrl}`);
+                          } catch (error) {
+                            return null;
+                          }
+                        })()
+                      : null) || require("../assets/profile_placeholder_2.jpg")
+                  }
                   alt="logo"
                 />
               </div>

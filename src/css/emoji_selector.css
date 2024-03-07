@@ -13,6 +13,7 @@
   padding: 1rem;
   transition: all 1s linear;
   border-radius: 25px;
+  background-color: var(--contacts-messages-count);
 }
 .offscreen {
   position: absolute;

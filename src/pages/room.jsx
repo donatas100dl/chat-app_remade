@@ -25,7 +25,7 @@ function Room({ room, messages, handleGetDate }) {
     <div className="chat-main" ref={messageRef}>
       {room && messages.length > 0
         ? messages.map((msg) => <Message message={msg} key={msg._id}/>)
-        : " no messages found"}
+        : <span>No messages of yet.</span>}
     </div>
   );
 }

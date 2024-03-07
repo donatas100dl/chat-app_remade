@@ -65,10 +65,10 @@ function contact_person({ user, handleSelect, room }) {
       <div className="date">
         <span>{getTime()}</span>
         <div className="has-new-message">
-          {getUnreadMessages() === null ? (
-            <></>
+          {getUnreadMessages() !== null && getUnreadMessages() > 0 ? (
+              <div className="new-messages">{getUnreadMessages()}</div>        
           ) : (
-            <div className="new-messages">{getUnreadMessages()}</div>
+           <></>
           )}
         </div>
       </div>

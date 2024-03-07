@@ -6,8 +6,8 @@ import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 import "../css/loader.css";
 
-// const url = "http://localhost:4000";
-const url = "https://chat-app-backend-shool-project.glitch.me";
+const url = "http://localhost:4000";
+// const url = "https://chat-app-backend-shool-project.glitch.me";
 
 const AuthContext = createContext();
 
@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [theme, setTheme] = useState("dark-yell");
+  const [theme, setTheme] = useState("dark-blue");
   const [users, setUsers] = useState([]);
   const [userRooms, setUsersRooms] = useState([]);
   useEffect(() => {
@@ -183,6 +183,10 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  
+  const handleSetUserRooms = async (rooms) => {
+    setUsersRooms(rooms)
+  }
   const contextData = useMemo(
     () => ({
       user,
@@ -198,6 +202,7 @@ export const AuthProvider = ({ children }) => {
       getUserRooms,
       isEmailTaken,
       isUsernameTaken,
+      handleSetUserRooms,
       handleEmailVerification,
     })
   );
