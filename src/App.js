@@ -12,7 +12,7 @@ import RoomRouting from "./components/roomRouting";
 import { io } from "socket.io-client";
 
 function App() {
-  //const socket = io("http://localhost:4000/");
+  // const socket = io("http://localhost:4000/");
   const socket = io("https://chat-app-backend-shool-project.glitch.me");
   return (
     <div className="App">

@@ -5,8 +5,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useAuth } from "./authContext";
 
-const url = "http://localhost:4000";
-
+// const url = "http://localhost:4000";
+const url = "https://chat-app-backend-shool-project.glitch.me";
 const RoomContext = createContext();
 
 export const RoomProvider = ({ children }) => {
