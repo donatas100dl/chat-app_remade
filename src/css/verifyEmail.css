@@ -120,3 +120,14 @@
   border: 1px solid var(--border);
   border-radius: 10px;
 }
+@media (max-width: 458px) {
+  .verifyEmail-main{
+    width: 100%;
+  }
+}
+@media (max-width: 360px) {
+  .verifyEmail-main{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}

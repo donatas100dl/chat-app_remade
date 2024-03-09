@@ -70,3 +70,8 @@
     border-top: 1px solid var(--border);
   }
 }
+@media (max-width: 453px) {
+  .contact_person .container h1 {
+    word-break: break-all;
+  }
+}  

@@ -114,3 +114,22 @@
     color: rgb(129 19 233);
     text-decoration: underline;
 }
+
+@media (max-width: 474px) {
+    .login-main{
+        border-radius: 0px;
+        width: 100%;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .login-wrapper{
+        overflow: hidden;
+    }
+}
+@media (max-width: 414px) {
+    .login-main{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+}

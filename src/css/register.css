@@ -140,7 +140,7 @@
   position: relative;
   font-size: 1.1rem;
   transition: all 0.3s linear;
-  opacity: 0.3;
+  opacity: 0.3;  
 }
 .register-main section .step::after {
   content: "";
@@ -234,3 +234,41 @@
   font-size: .9rem !important;
   display: flex;
 }
+
+@media (max-width: 474px) {
+  .register-main{
+      border-radius: 0px;
+      width: 100%;
+      justify-content: center;
+      overflow: hidden;
+  }
+  .register-main section .step::after {
+    width: 60%;
+    left: 129%;
+  }
+  .register-wrapper{
+      overflow: hidden;
+  }
+}
+@media (max-width: 400px) {
+  .register-main section .step::after {
+    width: 60%;
+    left: 129%;
+  }
+}
+@media (max-width: 374px) {
+  .register-main{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .register-main section .step::after {
+    width: 90%;
+    left: 129%;
+  }
+}
+@media (max-width: 344px) {
+  .register-main section .step::after {
+display: none;
+  }
+}
+  

@@ -22,7 +22,7 @@ function Home() {
             <h1>Better way to chat with someone</h1>
             <p className="line"></p>
             <p>Discover new connections, click & chat It's that simple!</p>
-            <span>Get Started</span>
+            <span onClick={() => navigate("/user/login")}>Get Started</span>
         </section>
         <div className="icon">
         <svg width="458" height="467" viewBox="0 0 458 467" fill="none" xmlns="http://www.w3.org/2000/svg">
