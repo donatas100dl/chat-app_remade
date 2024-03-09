@@ -28,16 +28,12 @@ export default function Register() {
   });
 
   useEffect(() => {
-    console.log("isSuccess", isSuccess)
-    console.log("user", user)
-    console.log("avatar ", avatarPath)
   }, [isSuccess, avatarPath, user]);
 
 
   const nextStep = async (e) => {
     e.preventDefault();
     setSuccess((prevSuccess) => {
-      console.log("Previous state:", prevSuccess);
       return {
         ...prevSuccess,
         email: true,
@@ -73,7 +69,6 @@ export default function Register() {
           return;
         }
 
-        console.log(user.confirmPassword !== user.password)
         setStep(step + 1);
         return;
       case 2:
@@ -85,9 +80,7 @@ export default function Register() {
         setStep(step + 1);
         return;
       case 3:
-        console.log(user)
         if (user.verifyEmail !== user.email || user.verifyPassword === "") {
-          console.error("failed to verify email")
           setSuccess((prevSuccess) => ({ ...prevSuccess, verifyEmail: false }));
           return;
         }
@@ -102,13 +95,11 @@ export default function Register() {
 
   const handleChange = (e) => {
     e.preventDefault();
-    console.log(e.target.name + "   " + e.target.value )
     setUsers({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleToggle = (imgPath) => {
     setAvatarSelection(!avatarSelection);
-    console.log(imgPath, "imgPath");
     if (typeof imgPath === "string") {
       const parts = imgPath.split("assets/");
       setAvatarPath(parts[1]);

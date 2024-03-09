@@ -28,7 +28,8 @@ function Dashboard({ socket }) {
   const [allUsers, setAllUsers] = useState([]);
   const [input, setInput] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const [room, setRoom] = useState(null);
+  // const [room, setRoom] = useState({ _id: '', user_id_1: '', user_id_2: '', messages: []});
+
   const [lastestMassage, setLastestMassage] = useState("");
   const [userSearch, setUserSearch] = useState("");
   const [expandContactList, setExpandContactList] = useState(false);
@@ -43,7 +44,7 @@ function Dashboard({ socket }) {
     handleUserLogout,
     handleSetUserRooms,
   } = useAuth();
-  const { loadRoom, updateMessages, messageRead,  } = useRoom();
+  const { loadRoom, updateMessages, messageRead, room } = useRoom();
   const navigate = useNavigate();
   const real_time = new Date();
   const isFirstLoad = useRef(true);
@@ -62,9 +63,6 @@ function Dashboard({ socket }) {
     if (!user) {
       navigate("/user/login");
     }
-    console.log(user);
-    getAllUsers();
-    console.log(allUsers);
   }, []);
 
   useEffect(() => {
@@ -88,30 +86,23 @@ function Dashboard({ socket }) {
         let data = possibleUsers.filter((selectedUser) =>
           selectedUser.name.toLowerCase().startsWith(userSearch.toLowerCase())
         );
-        console.log("all users", data);
         setAllUsers(data);
       }
     }
-
     if (room) {
-      console.log("checking for unread messages");
+      console.log(room)
       setMessages(room.messages);
-      console.log(room);
       if (
         room.messages.some(
           (message) => message.read === false && message.user_id !== user.id
         )
       ) {
-        console.log("2");
         messageRead(room._id);
         const selectedRoomIndex = userRooms.findIndex(
           (selectedRoom) => selectedRoom._id === room._id
         );
-        console.log(room.id)
-        console.log("selectedRoomIndex ", selectedRoomIndex)
         if (selectedRoomIndex !== -1) {
           // Check if the selected room is found
-          console.log("3");
           const updatedMessages = userRooms[selectedRoomIndex].messages.map(
             (message) => {
               if (message.read === false) {
@@ -120,13 +111,11 @@ function Dashboard({ socket }) {
               return message;
             }
           );
-          console.log("4");
           const updatedUserRooms = [...userRooms]; // Create a copy of userRooms
           updatedUserRooms[selectedRoomIndex] = {
             ...userRooms[selectedRoomIndex],
             messages: updatedMessages,
           };
-          console.log("final",   updatedUserRooms);
           handleSetUserRooms(updatedUserRooms);
         }
       }
@@ -136,7 +125,6 @@ function Dashboard({ socket }) {
   useEffect(() => {
     if (
       allUsers.length > 0 &&
-      userRooms.length > 0 &&
       user &&
       isFirstLoad.current === true
     ) {
@@ -144,20 +132,13 @@ function Dashboard({ socket }) {
       const randomNum = Math.floor(Math.random() * allUsers.length);
       const randomUser = allUsers[randomNum];
       setSelectedUser(randomUser);
-      console.log("randomuser ", randomUser);
-      console.log(
-        `random number: ${randomNum} allsuerLenght: ${allUsers.length}`
-      );
-      loadRoom(user._id, randomUser._id).then((loadedRoom) => {
+      loadRoom(randomUser._id).then((loadedRoom) => {
         if (loadedRoom) {
-          console.log("joing room");
           socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
-          console.log("setting room");
-          setRoom(loadedRoom);
         }
       });
     }
-  }, [allUsers, userRooms]);
+  }, [allUsers]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -204,12 +185,12 @@ function Dashboard({ socket }) {
   };
 
   const getSelectedUser = async (user_1) => {
-    await getUserRooms();
+    await getUserRooms()
     setSelectedUser(user_1);
-    console.log(user);
-    const loadedRoom = await loadRoom(user._id, user_1._id);
-    socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
-    setRoom(loadedRoom);
+    const loadedRoom = await loadRoom(user_1._id);
+    if (loadedRoom) {
+      socket.emit("joinRoom", { id: loadedRoom._id }, loadMessageCallback);
+    }
   };
 
   const deleteMessage = (e, id) => {
@@ -252,17 +233,14 @@ function Dashboard({ socket }) {
 
   const handleExpandContact = () => {
     setExpandContactList(!expandContactList);
-    console.log(!expandContactList);
   };
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
-      console.log("Swiped Left");
       setExpandContactList(false);
       // You can add other logic when swiped left here
     },
     onSwipedRight: () => {
-      console.log("Swiped right");
       setExpandContactList(true);
       // You can add other logic when swiped right here
     },

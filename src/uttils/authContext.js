@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { account } from "../appWriteConfig";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 import "../css/loader.css";
 
@@ -17,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [theme, setTheme] = useState("dark-blue");
   const [users, setUsers] = useState([]);
-  const [userRooms, setUsersRooms] = useState([]);
+  const [userRooms, setUserRooms] = useState([]);
   useEffect(() => {
     getUserOnLoad();
     if(!Cookies.get("theme")){
@@ -32,7 +31,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
-    console.log("theme", theme);
   },[theme])
 
   const getUserOnLoad = async () => {
@@ -42,7 +40,6 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: "Bearer " + token },
       });
       if (res) {
-        console.log(res)
         const userData = {
           email: res.data.email,
           name: res.data.name,
@@ -53,22 +50,24 @@ export const AuthProvider = ({ children }) => {
         !userData ? navigate("/user/login") : setUser(userData);
       }
       setLoading(false);
+      getAllUsers();
       getUserRooms();
       navigate("/dashboard");
+
     } catch (error) {
-      //console.error(error);
+      console.log(error);
     }
     setLoading(false);
   };
 
   const getUserRooms = async () => {
     const token = await getToken();
+    console.log("calling api");
     const res = await axios.get(`${url}/user/`, {
       headers: { Authorization: "Bearer " + token },
     });
     if (res) {
-      setUsersRooms(res.data.rooms);
-      console.log("gotten all rooms ", res.data.rooms);
+      setUserRooms(res.data.rooms);
     }
   };
 
@@ -86,6 +85,7 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async (e, loginInfo) => {
     e.preventDefault();
     try {
+      console.log("calling api");
       const apiRes = await axios.post(`${url}/user/login`, {
         email: loginInfo.email,
         password: loginInfo.password,
@@ -115,6 +115,7 @@ export const AuthProvider = ({ children }) => {
   };
   const handleRegister = async (registerInfo) => {
     try {
+      console.log("calling api");
       const res = await axios.post(`${url}/user/`, {
         name: registerInfo.username,
         email: registerInfo.email,
@@ -131,23 +132,23 @@ export const AuthProvider = ({ children }) => {
 }
   const handleUserLogout = async (e) => {
     e.preventDefault();
-    console.log("logged out")
     setUser(null);
     Cookies.remove("userToken");
     navigate("/user/login");
   };
 
   const getAllUsers = async () => {
+    console.log("calling api");
     await axios.get(`${url}/user/all`).then((res) => {
       if (res.data.users.length !== 0) {
         setUsers(res.data.users);
-        console.log(res.data.users);
       }
     });
   };
 
   const isEmailTaken = async (email) => {
     try {
+      console.log("calling api");
       const res = await axios.post(`${url}/user/exist/email`, {
         email:email
       });
@@ -161,6 +162,7 @@ export const AuthProvider = ({ children }) => {
 
   const isUsernameTaken = async (username) => {
     try {
+      console.log("calling api");
       const res = await axios.post(`${url}/user/exist/username`, {
         name:username
       });
@@ -174,6 +176,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleEmailVerification = async (email) => {
     try {
+      console.log("calling api");
       const res = await axios.post(`${url}/user/verify/email`, {
         email: email
       });
@@ -185,7 +188,7 @@ export const AuthProvider = ({ children }) => {
 
   
   const handleSetUserRooms = async (rooms) => {
-    setUsersRooms(rooms)
+    setUserRooms(rooms)
   }
   const contextData = useMemo(
     () => ({
@@ -194,6 +197,7 @@ export const AuthProvider = ({ children }) => {
       url,
       loading,
       userRooms,
+      handleSetUserRooms,
       handleLogin,
       handleRegister,
       handleUserLogout,

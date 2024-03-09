@@ -15,8 +15,6 @@ export default function ThemeSelector() {
   useEffect(() => {
     document.body.setAttribute("data-theme", themes[index-1]);
     Cookies.set("theme", themes[index-1] )
-    console.log("seeting them to ", themes[index-1])
-    console.log(currentRef)
   }, [index]);
 
 

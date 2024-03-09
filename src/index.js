@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ReactQueryProvider } from 'react-query';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -16,9 +15,7 @@ root.render(
   // {/* </React.StrictMode> */}
 
   <BrowserRouter>
-    <ReactQueryProvider>
   <App/>
-  </ReactQueryProvider>
 </BrowserRouter>
 
 

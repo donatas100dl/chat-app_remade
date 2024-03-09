@@ -10,16 +10,12 @@ import { RoomProvider } from "./uttils/roomContext";
 import { useEffect } from "react";
 import RoomRouting from "./components/roomRouting";
 import { io } from "socket.io-client";
-import {QueryClientProvider, useQuery, QueryClient } from "@tanstack/react-query"
 
 function App() {
-  console.log("loading... app");
   //const socket = io("http://localhost:4000/");
   const socket = io("https://chat-app-backend-shool-project.glitch.me");
-  const queryClient = new QueryClient()
   return (
     <div className="App">
-      <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RoomProvider>
           <Routes>
@@ -31,7 +27,6 @@ function App() {
            </Routes>
         </RoomProvider>
       </AuthProvider>
-      </QueryClientProvider>
     </div>
   );
 }

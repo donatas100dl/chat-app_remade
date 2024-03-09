@@ -1,9 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useQuery } from "react-query"; // Import from React Query
 import { account } from "../appWriteConfig";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import jwt_decode from "jwt_decode";
 import Cookies from "js-cookie";
 import { useAuth } from "./authContext";
 
@@ -14,48 +12,79 @@ const RoomContext = createContext();
 export const RoomProvider = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { user, userRooms } = useAuth();
+  const [room, setRoom] = useState(null);
+  const { user, userRooms, handleSetUserRooms } = useAuth();
 
   useEffect(() => {
     setLoading(false);
   }, []);
+  useEffect(() => {}, [room]);
 
   // Query functions for API calls
-  const queryLoadRoom = async ({ user_id_1, user_id_2 }) => {
+  const loadRoom = async (user_id_2) => {
     try {
-      const response = await axios.post(
-        `${url}/chat/new`,
-        {
-          user_id_1,
-          user_id_2,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+      if (user && userRooms) {
+        var data = null;
+        var room = null;
+        if (userRooms) {
+          room = userRooms.find(
+            (room) =>
+              room.user_id_1 === user_id_2 || room.user_id_2 === user_id_2
+          );
         }
-      );
-      return response.data.room;
-    } catch (error) {
-      console.error(error);
-      throw error;
+        if (room) {
+          handleSetUserRooms((prevRooms) => {
+            if (!prevRooms.some((room) => room._id === room._id)) {
+              return [...prevRooms, room];
+            }
+            return prevRooms;
+          });
+          setRoom(room);
+          return room;
+        }
+        if (!room) {
+          // create new room
+          setLoading(true);
+          console.log("calling api");
+          const res = await axios.post(
+            `${url}/chat/new`,
+            {
+              user_id_1: user._id,
+              user_id_2: user_id_2,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          if (res) {
+            room = res.data.room;
+            data = res.data;
+          }
+        }
+        setLoading(false);
+        if (room) {
+          setRoom(room);
+          handleSetUserRooms((prevRooms) => {
+            if (!prevRooms.some((room) => room._id === room._id)) {
+              return [...prevRooms, room];
+            }
+            return prevRooms;
+          });
+
+          return room;
+        }
+        return room;
+      }
+    } catch (err) {
+      console.log("there is and eer :", err);
     }
   };
 
-  const queryGetRoomByID = async ({ roomId }) => {
+  const updateMessages = async (message, room) => {
     try {
-      const response = await axios.get(`${url}/chat/${roomId}`, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      });
-      return response.data.room;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-
-  const queryUpdateMessages = async (message, room) => {
-    try {
+      console.log("calling api");
       const res = await axios.put(
         `${url}/chat/update/${room._id}`,
         {
@@ -80,7 +109,7 @@ export const RoomProvider = ({ children }) => {
       throw e;
     }
   };
-  const queryMessageRead = async (roomId) => {
+  const messageRead = async (roomId) => {
     try {
       const res = await axios.put(`${url}/chat/read/messages/${roomId}`, null, {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -96,15 +125,24 @@ export const RoomProvider = ({ children }) => {
   };
 
   const contextData = {
-    queryLoadRoom,
-    queryGetRoomByID,
-    queryUpdateMessages,
-    queryMessageRead,
+    room,
+    loadRoom,
+    updateMessages,
+    messageRead,
   };
 
   return (
     <RoomContext.Provider value={contextData}>
-      {loading ? <p>loading...</p> : children}
+      {loading ? (
+        <div class="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      ) : (
+        children
+      )}
     </RoomContext.Provider>
   );
 };
